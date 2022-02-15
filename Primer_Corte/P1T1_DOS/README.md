@@ -2,7 +2,7 @@
 
 ## Configuración inicial
 
-Para crear el archivo `package.json` usamos el comando `npm init`. En caso de que se quiera crear un archivo por defecto, usamos el comando `npm init -y`, pero modificamos el contenido del mismo.
+Para crear el archivo `package.json` usamos el comando `npm init`. En caso de que se quiera crear un archivo con información por defecto, usamos el comando `npm init -y`, pero modificamos el contenido del mismo.
 
 ## Estructura inicial del proyecto
 
@@ -18,12 +18,12 @@ P1T1_DOS
         |___ models
         |___ repositories
         |___ routes
-    |___ app.ts
+    |___ index.ts
 ```
 
 ## Primeros paquetes
 
-Vamos a instalar las librerías ***CORS*** (Cross-origin resource sharing), ***Morgan*** para formatear la salida en consola, ***Express*** para el montaje del backend, ***JSONWebToken*** para los token de validación, ***PGPromise*** para conectarnos a Postgres, con el comando `npm i cors morgan express jsonwebtoken pg-promise`.
+Vamos a instalar las librerías ***CORS*** (Cross-origin resource sharing), ***Morgan*** para formatear la salida en consola, ***Express*** para el montaje del backend, ***JSONWebToken*** para los token de validación, ***PG-Promise*** para conectarnos a PostgreSQL, con el comando `npm i cors morgan express jsonwebtoken pg-promise`.
 
 En caso de querer remover alguna librería usamos el comando `npm uninstall <librería>`.
 
@@ -102,7 +102,7 @@ class DAO {
             course: 'DOS'
         }
 
-        Promise.resolve(json)
+        return Promise.resolve(json)
             .then((response: any) => {
                 console.log('Respuesta: ', response)
                 res.status(200).json({
@@ -117,6 +117,10 @@ class DAO {
     }
 }
 ```
+
+El método anterior nos permite que solo las clases que practiquen la herencia, puedan acceder al método de esta clase mediante la palabra reservada `protected`. Mediante la palabra reservada `static`, podemos acceder a la función sin tener que crear una instancia de la clase usando la notación punto: `<Clase>.<miembro_estático>` ([TypeScript Static - TutorialsTeacher](https://www.tutorialsteacher.com/typescript/typescript-static)).
+
+Otra característica del método es que es asíncrono, por lo que espera una respuesta. `async` transforma las funciones en las que se usa, en Promesas. El método `getInfo()` recibe como parámetros una petición y una respuesta y luego retorna una Promesa de tipo `any`. La promesa resuelve el json, y cuando todo sea correcto envía un código de status 200 y una respuesta de tipo json. En caso de error se retornar un código de error 400 y un Error en consola.
 
 ## Subir archivos a GIT
 

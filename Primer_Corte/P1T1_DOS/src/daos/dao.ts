@@ -1,14 +1,30 @@
 import { Request, Response } from 'express'
 
 
+
 class DAO {
+    /**
+     * It returns a JSON object with the professors and course name.
+     * @param {Request} req - The request object.
+     * @param {Response} res - Response
+     * @returns The response is a JSON object with the following structure:
+     * ```
+     * {
+     *     ok: true,
+     *     response: {
+     *         professors: ['Carlos Andrés', 'Harvey'],
+     *         course: 'DOS'
+     *     }
+     * }
+     * ```
+     */
     protected static async getInfo(req: Request, res: Response): Promise<any> {
         const json = {
             professors: ['Carlos Andrés', 'Harvey'],
             course: 'DOS'
         }
 
-        Promise.resolve(json)
+        return Promise.resolve(json)
             .then((response: any) => {
                 console.log('Respuesta: ', response)
                 res.status(200).json({
