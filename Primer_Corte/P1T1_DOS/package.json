@@ -1,0 +1,30 @@
+{
+    "name": "p1t1_dos",
+    "version": "1.0.0",
+    "description": "Primer Backend con DOS",
+    "main": "index.js",
+    "scripts": {
+        "test": "",
+        "dev": "nodemon build/index.js",
+        "build": "tsc -w"
+    },
+    "keywords": [
+        "dos",
+        "node"
+    ],
+    "author": "Carlos David Páez Ferreira",
+    "license": "ISC",
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^4.17.2",
+        "jsonwebtoken": "^8.5.1",
+        "morgan": "^1.10.0",
+        "pg-promise": "^10.11.1"
+    },
+    "devDependencies": {
+        "@types/cors": "^2.8.12",
+        "@types/express": "^4.17.13",
+        "@types/jsonwebtoken": "^8.5.8",
+        "@types/morgan": "^1.9.3"
+    }
+}
