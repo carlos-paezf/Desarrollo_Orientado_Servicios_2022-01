@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 
 
-
 class DAO {
     /**
      * It returns a JSON object with the professors and course name.
@@ -38,3 +37,6 @@ class DAO {
             })
     }
 }
+
+
+export default DAO

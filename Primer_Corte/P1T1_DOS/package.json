@@ -4,7 +4,7 @@
     "description": "Primer Backend con DOS",
     "main": "index.js",
     "scripts": {
-        "test": "",
+        "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "nodemon build/index.js",
         "build": "tsc -w"
     },
@@ -19,6 +19,7 @@
         "express": "^4.17.2",
         "jsonwebtoken": "^8.5.1",
         "morgan": "^1.10.0",
+        "nodemon": "^2.0.15",
         "pg-promise": "^10.11.1"
     },
     "devDependencies": {
