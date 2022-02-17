@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cors_1 = __importDefault(require("cors"));
 const morgan_1 = __importDefault(require("morgan"));
 const express_1 = __importDefault(require("express"));
+const colors_1 = __importDefault(require("colors"));
 const routes_1 = __importDefault(require("../routes/routes"));
 class Server {
     constructor() {
@@ -34,7 +35,8 @@ class Server {
      */
     init() {
         this._app.listen(this._app.get('PORT'), () => {
-            console.log(`Servidor corriendo en modo local en http://localhost:${this._app.get('PORT')}`);
+            console.log(`Servidor corriendo en modo local en ${colors_1.default.green.underline(`http://localhost:${this._app.get('PORT')}`)} \n`);
+            console.log(`       - ${colors_1.default.italic.blue('get-info')}: ${colors_1.default.underline(`http://localhost:${this._app.get('PORT')}/api/test/get-info`)} \n\n`);
         });
     }
 }

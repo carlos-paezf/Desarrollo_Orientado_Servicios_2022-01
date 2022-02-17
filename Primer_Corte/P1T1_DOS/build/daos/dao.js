@@ -8,7 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const colors_1 = __importDefault(require("colors"));
 class DAO {
     /**
      * It returns a JSON object with the professors and course name.
@@ -33,7 +37,7 @@ class DAO {
             };
             return Promise.resolve(json)
                 .then((response) => {
-                console.log('Respuesta: ', response);
+                console.log(colors_1.default.italic.green('Respuesta: '), response);
                 res.status(200).json({
                     ok: true,
                     response

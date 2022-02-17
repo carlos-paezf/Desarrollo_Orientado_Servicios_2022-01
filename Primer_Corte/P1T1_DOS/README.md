@@ -254,6 +254,24 @@ Dentro de nuestro navegador vamos a acceder a la ruta `http://localhost:8088/api
 
 > En caso se no funcionar revisar: En el constructor de la clase `Server` no se debe llamar el método para escuchar el servidor en x puerto. En el constructor de la clase `Routes` se debe asignar el valor a la variable que almacena el valor de `Router()` y hacer un llamado al método que configura las rutas.
 
+## Colors
+
+Vamos a instalar una librería llamada ***Colors***, la cual nos permite hacerle varias modificaciones de estilo a las salidas en consola. Para instalarlo usamos el comando `npm i colors`. El primer archivo en el que vamos a añadir los colores, será en `server.ts`, más específicamente en las salidas que definen la ruta inicial, y los servicios que ofrecemos:
+
+```ts
+import colors from 'colors'
+
+class Server {
+    ...
+    public init(): void {
+        this._app.listen(this._app.get('PORT'), () => {
+            console.log(`Servidor corriendo en modo local en ${colors.green.underline(`http://localhost:${this._app.get('PORT')}`)} \n`)
+            console.log(`       - ${colors.italic.blue('get-info')}: ${colors.underline(`http://localhost:${this._app.get('PORT')}/api/test/get-info`)} \n\n`)
+        })
+    }
+}
+```
+
 ## Subir archivos a GIT
 
 Necesitamos crear un repositorio al que podemos subir la información. Al crear el repositorio se muestran los pasos para la configuración inicial. Es recomendado crear un archivo llamado `.gitignore` en el que añadimos los directorios o archivos que queremos ignorar y no subir al repositorio, como por ejemplo el directorio de `node_modules`.

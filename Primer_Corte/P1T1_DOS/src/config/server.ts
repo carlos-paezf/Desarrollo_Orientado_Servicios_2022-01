@@ -1,6 +1,7 @@
 import cors from 'cors'
 import morgan from 'morgan'
 import express from 'express'
+import colors from 'colors'
 
 import routes from '../routes/routes'
 
@@ -37,7 +38,8 @@ class Server {
      */
     public init(): void {
         this._app.listen(this._app.get('PORT'), () => {
-            console.log(`Servidor corriendo en modo local en http://localhost:${this._app.get('PORT')}`)
+            console.log(`Servidor corriendo en modo local en ${colors.green.underline(`http://localhost:${this._app.get('PORT')}`)} \n`)
+            console.log(`       - ${colors.italic.blue('get-info')}: ${colors.underline(`http://localhost:${this._app.get('PORT')}/api/test/get-info`)} \n\n`)
         })
     }
 }

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import colors from 'colors';
 
 
 class DAO {
@@ -25,7 +26,7 @@ class DAO {
 
         return Promise.resolve(json)
             .then((response: any) => {
-                console.log('Respuesta: ', response)
+                console.log(colors.italic.green('Respuesta: '), response)
                 res.status(200).json({
                     ok: true,
                     response
