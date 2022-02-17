@@ -4,7 +4,8 @@ Enlace a otro curso de Node.JS: [Curso_Node.js](https://github.com/carlos-paezf/
 
 ## Temario
 
-| Tema           | Enlace                                            |
-| -------------- | ------------------------------------------------- |
-| Cloud Services | [Cloud Services](./Primer_Corte/Cloud_Service.md) |
-| Primer Backend | [P1T1_DOS](./Primer_Corte/P1T1_DOS/README.md)     |
+| Tema                | Enlace                                            |
+| ------------------- | ------------------------------------------------- |
+| Cloud Services      | [Cloud Services](./Primer_Corte/Cloud_Service.md) |
+| HTTP Response Codes | [HTTP Response Codes](./http-response-codes.pdf)  |
+| Primer Backend      | [P1T1_DOS](./Primer_Corte/P1T1_DOS/README.md)     |
