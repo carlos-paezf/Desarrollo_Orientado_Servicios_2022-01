@@ -8,6 +8,11 @@ class ProfessorController extends ProfessorDAO {
     public getProfessors = (req: Request, res: Response): void => {
         ProfessorDAO.getProfessors(SQL_PROFESSOR.ALL, [], res)
     }
+
+    /* This is a function that will be called when the user requests the `/professors/type-and-faculty` endpoint. */
+    public getTypeProfessorsAndFaculty = (req: Request, res: Response): void => {
+        ProfessorDAO.getProfessors(SQL_PROFESSOR.TYPE_AND_FACULTY, [], res)
+    }
 }
 
 

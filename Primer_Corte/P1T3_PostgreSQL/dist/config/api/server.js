@@ -59,6 +59,7 @@ class Server {
                 console.log((0, colors_1.green)(`Server running locally on ${(0, colors_1.italic)(`http://localhost:${this._port}`)}`));
                 console.log(`     - faculties ${colors_1.italic.underline(`http://localhost:${this._port}${this._paths.faculties}`)}`);
                 console.log(`     - professors ${colors_1.italic.underline(`http://localhost:${this._port}${this._paths.professors}`)}`);
+                console.log(`     - professors - type and faculty ${colors_1.italic.underline(`http://localhost:${this._port}${this._paths.professors}/type-and-faculty`)}`);
             });
         };
         this._app = (0, express_1.default)();

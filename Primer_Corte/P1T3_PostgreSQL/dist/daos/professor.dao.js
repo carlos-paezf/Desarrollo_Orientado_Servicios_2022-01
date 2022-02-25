@@ -31,4 +31,14 @@ ProfessorDAO.getProfessors = (sqlQuery, parameters, res) => __awaiter(void 0, vo
         res.status(400).json({ ok: false });
     }
 });
+ProfessorDAO.getTypeAndFaculty = (sqlQuery, parameters, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const answer = yield connection_DB_1.default.pool.result(sqlQuery, parameters);
+        res.status(200).json({ ok: true, resultsQuery: answer.rows });
+    }
+    catch (error) {
+        console.log((0, colors_1.red)('Error in ProfessorDAO: '), error);
+        res.status(400).json({ ok: false });
+    }
+});
 exports.default = ProfessorDAO;

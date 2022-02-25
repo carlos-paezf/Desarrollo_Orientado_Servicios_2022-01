@@ -508,3 +508,56 @@ class Server {
 
 export default Server
 ```
+
+## Servicio que muestra los tipos y el nombre de la facultad
+
+### Consulta SQL
+
+Creamos una query de SQL que nos permita obtener la información de los usuarios, pero retornando los tipos de docentes a manera de string, y además, mostrando el nombre de la facultad a la que pertenece, teniendo en cuenta el id de la misma. Dentro del repositorio de las sentencias de los docentes, añadimos la consulta:
+
+```ts
+export const SQL_PROFESSOR = {
+    ...,
+    TYPE_AND_FACULTY: "SELECT \
+        p.professor_id, p.professor_name, p.professor_surname, p.professor_doc, f.faculty_name, \
+        CASE p.professor_type \
+            WHEN 1 THEN 'Decano' \
+            WHEN 2 THEN 'Docente Titular' \
+            WHEN 3 THEN 'Docente Asociado' \
+            WHEN 4 THEN 'Docente Asistente' \
+            WHEN 5 THEN 'Docente Auxiliar' \
+            WHEN 6 THEN 'Other' \
+        END AS professor_type\
+        FROM professor p, faculty f \
+        WHERE p.faculty_id = f.faculty_id"
+}
+```
+
+Por el momento usaremos la misma función del DAO de los docentes, pero en su implementación en el contralor hacemos la implementación de la sentencia SQL:
+
+```ts
+class ProfessorController extends ProfessorDAO {
+    ...
+    /* This is a function that will be called when the user requests the `/professors/type-and-faculty` endpoint. */
+    public getTypeProfessorsAndFaculty = (req: Request, res: Response): void => {
+        ProfessorDAO.getProfessors(SQL_PROFESSOR.TYPE_AND_FACULTY, [], res)
+    }
+}
+```
+
+Procedemos a crear una ruta con la que accedemos al servicio:
+
+```ts
+class ProfessorRoutes {
+    ...
+    /**
+     * This is a function that is called when the class is instantiated. 
+     */
+    public config = (): void => {
+        ...
+        this.professorRoutes.get('/type-and-faculty', professorController.getTypeProfessorsAndFaculty)
+    }
+}
+```
+
+Como en la clase anterior retornamos una propiedad de que contiene toda la configuración de las rutas, entonces no debemos hacer nada dentro de la clase `Server`.

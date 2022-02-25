@@ -12,6 +12,7 @@ class ProfessorRoutes {
          */
         this.config = () => {
             this.professorRoutes.get('/', professor_controller_1.default.getProfessors);
+            this.professorRoutes.get('/type-and-faculty', professor_controller_1.default.getTypeProfessorsAndFaculty);
         };
         this.professorRoutes = (0, express_1.Router)();
         this.config();

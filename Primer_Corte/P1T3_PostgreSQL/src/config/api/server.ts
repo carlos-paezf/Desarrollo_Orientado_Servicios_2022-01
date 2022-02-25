@@ -50,6 +50,7 @@ class Server {
             console.log(green(`Server running locally on ${italic(`http://localhost:${this._port}`)}`))
             console.log(`     - faculties ${italic.underline(`http://localhost:${this._port}${this._paths.faculties}`)}`)
             console.log(`     - professors ${italic.underline(`http://localhost:${this._port}${this._paths.professors}`)}`)
+            console.log(`     - professors - type and faculty ${italic.underline(`http://localhost:${this._port}${this._paths.professors}/type-and-faculty`)}`)
         })
     }
 }

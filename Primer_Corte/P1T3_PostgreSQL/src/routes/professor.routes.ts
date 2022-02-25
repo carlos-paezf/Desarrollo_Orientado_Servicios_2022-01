@@ -15,6 +15,7 @@ class ProfessorRoutes {
      */
     public config = (): void => {
         this.professorRoutes.get('/', professorController.getProfessors)
+        this.professorRoutes.get('/type-and-faculty', professorController.getTypeProfessorsAndFaculty)
     }
 }
 
