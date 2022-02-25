@@ -341,9 +341,6 @@ class FacultyRoutes {
         this.config()
     }
 
-    /**
-     * This is a function that is called when the class is instantiated. 
-     */
     public config = (): void => {
         this.facultyRoutes.get('/', facultyController.getFaculties)
     }
@@ -406,7 +403,6 @@ import { SQL_PROFESSOR } from "../repositories/professor.sql";
 
 
 class ProfessorController extends ProfessorDAO {
-    /* This is a function that will be called when the user requests the `/professors` endpoint. */
     public getProfessors = (req: Request, res: Response): void => {
         ProfessorDAO.getProfessors(SQL_PROFESSOR.ALL, [], res)
     }
@@ -434,9 +430,6 @@ class ProfessorRoutes {
         this.config()
     }
 
-    /**
-     * This is a function that is called when the class is instantiated. 
-     */
     public config = (): void => {
         this.professorRoutes.get('/', professorController.getProfessors)
     }
@@ -533,26 +526,26 @@ export const SQL_PROFESSOR = {
 }
 ```
 
+### Controller
+
 Por el momento usaremos la misma función del DAO de los docentes, pero en su implementación en el contralor hacemos la implementación de la sentencia SQL:
 
 ```ts
 class ProfessorController extends ProfessorDAO {
     ...
-    /* This is a function that will be called when the user requests the `/professors/type-and-faculty` endpoint. */
     public getTypeProfessorsAndFaculty = (req: Request, res: Response): void => {
         ProfessorDAO.getProfessors(SQL_PROFESSOR.TYPE_AND_FACULTY, [], res)
     }
 }
 ```
 
+### Rutas
+
 Procedemos a crear una ruta con la que accedemos al servicio:
 
 ```ts
 class ProfessorRoutes {
     ...
-    /**
-     * This is a function that is called when the class is instantiated. 
-     */
     public config = (): void => {
         ...
         this.professorRoutes.get('/type-and-faculty', professorController.getTypeProfessorsAndFaculty)
