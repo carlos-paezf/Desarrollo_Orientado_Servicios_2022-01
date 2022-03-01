@@ -12,8 +12,9 @@ class ProfessorController extends professor_dao_1.default {
         this.getProfessors = (req, res) => {
             professor_dao_1.default.getProfessors(professor_sql_1.SQL_PROFESSOR.ALL, [], res);
         };
+        /* This is a function that will be called when the user requests the `/professors/type-and-faculty` endpoint. */
         this.getTypeProfessorsAndFaculty = (req, res) => {
-            professor_dao_1.default.getTypeAndFaculty(professor_sql_1.SQL_PROFESSOR.TYPE_AND_FACULTY, [], res);
+            professor_dao_1.default.getProfessors(professor_sql_1.SQL_PROFESSOR.TYPE_AND_FACULTY, [], res);
         };
     }
 }

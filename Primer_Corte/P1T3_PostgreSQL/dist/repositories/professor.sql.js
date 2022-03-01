@@ -2,7 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SQL_PROFESSOR = void 0;
 exports.SQL_PROFESSOR = {
-    ALL: 'SELECT p.professor_id, p.faculty_id, p.professor_doc, p.professor_name, p.professor_surname, p.professor_type FROM professor p',
+    ALL: 'SELECT \
+        p.professor_id, p.faculty_id, p.professor_doc, p.professor_name, p.professor_surname, p.professor_type \
+        FROM professor p',
     TYPE_AND_FACULTY: "SELECT \
         p.professor_id, p.professor_name, p.professor_surname, p.professor_doc, f.faculty_name, \
         CASE p.professor_type  \
