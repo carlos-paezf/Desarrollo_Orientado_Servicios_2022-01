@@ -9,7 +9,7 @@ import { vars } from '../domains/var_db.config'
 
 class ConnectionDB {
     private _pgp = pgPromise(ConnectionOptions.pgOptions)
-    public pool: any
+    public pool
 
     constructor() {
         this.pool = this._pgp(vars)

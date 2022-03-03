@@ -452,8 +452,8 @@ class Server {
     public init = (): void => {
         this._app.listen(this._port, () => {
             console.log(green(`Server running locally on ${italic(`http://localhost:${this._port}`)}`))
-            console.log(`     - faculties ${italic.underline(`http://localhost:${this._port}${this._paths.political_parties}`)}`)
-            console.log(`     - professors ${italic.underline(`http://localhost:${this._port}${this._paths.candidates}`)}`)
+            console.log(`     - political parties ${italic.underline(`http://localhost:${this._port}${this._paths.political_parties}`)}`)
+            console.log(`     - candidates ${italic.underline(`http://localhost:${this._port}${this._paths.candidates}`)}`)
         })
     }
 }
@@ -476,4 +476,106 @@ server.init()
 
 ## API Client (Postman, Thunder, Insomnia)
 
-Vamos a crear un entorno de desarrollo dentro de las API Clients, con el fin de manejar las colecciones con las request que se realicen a nuestros servicios. Para este caso, tenemos una colección con el mismo nombre del proyecto, y dentro hacemos las primeras 2 peticiones que tenemos para nuestro server. Con Postman, podemos publicar la documentación de los endpoints de cada colección, por ejemplo la documentación de las rutas para los servicios de este backend es el siguiente: [P1T4_Candidatos](https://documenter.getpostman.com/view/8438809/UVksLZFF)
+Vamos a crear un entorno de desarrollo dentro de las API Clients, con el fin de manejar las colecciones con las request que se realicen a nuestros servicios. Para este caso, tenemos una colección con el mismo nombre del proyecto, y dentro hacemos las primeras 2 peticiones que tenemos para nuestro server. Con Postman, podemos publicar la documentación de los endpoints de cada colección, por ejemplo la documentación de las rutas para los servicios de este backend es el siguiente: [P1T4_Candidatos](https://documenter.getpostman.com/view/8438809/UVksLZFF). También podemos crear folders dentro de nuestras colecciones, tanto en Postman como en Thunder, y allí ponemos nuestras request.
+
+## Ordenar los resultados de las consultas
+
+Es muy recomendable ordenar los resultados de la base de datos, por lo tanto vamos a modificar los repositorios de las consultas, añadiendo un `ORDER BY`:
+
+```ts
+export const SQL_POLITICAL_PARTY = {
+    ALL: 'SELECT p.party_id, p.party_name FROM political_party p ORDER BY p.party_name'
+}
+```
+
+```ts
+export const SQL_CANDIDATE = {
+    ALL: 'SELECT c.candidate_id, c.candidate_name, c.candidate_date_birth, c.candidate_evaluation, p.party_name \
+        FROM candidate c, political_party p \
+        WHERE c.party_id = p.party_id \
+        ORDER BY p.party_name'
+}
+```
+
+## Servicio para creación (Political Party)
+
+### Repository Insert Political Party
+
+Dentro de las consultas almacenadas en el repositorio, añadimos una nueva propiedad para poder hacer un insert a la tabla de los partidos políticos. Para poder determinar que vamos a insertar un valor usamos la propiedad `$n` > 0 según el campo a insertar:
+
+```ts
+export const SQL_POLITICAL_PARTY = {
+    ...,
+    CREATE: 'INSERT INTO political_party (party_name) VALUES ($1) RETURNING party_id'
+}
+```
+
+### DAO Insert Political Party
+
+Necesitamos crear una consulta dentro del repositorio para poder hacer una consulta que nos verifique si el dato que se está tratando de ingresar no está en la base de datos, en caso contrario, se debe dar una respuesta de que los datos a ingresar ya están en la DB.
+
+```ts
+export const SQL_POLITICAL_PARTY = {
+    ...,
+    CONFIRM: 'SELECT COUNT(p.party_id) AS amount FROM political_party p WHERE LOWER(p.party_name) = LOWER($1)'
+}
+```
+
+Luego, dentro de nuestro DAO creamos un método que nos permita hacer las consultas para confirmar y para poder postear los datos. Dentro de este nuevo método tenemos que usar la función `.task()` para el pool, en el cual enviamos múltiples consultas o tareas a resolver, esta función es diferente a `.result()` que retorna una respuesta con muchos datos a partir de una sola consulta. Dentro de `.task()` vamos a hacer la consulta para confirmar si ya existe en la DB, esto nos debe retornar una propiedad con la cantidad de elementos que coinciden. En caso de que la cantidad de coincidencias sea 0, entonces se retorna una nueva query que devuelve el id del elemento creado, de otro modo retorna un id = 0.
+
+Cuando la consulta termina de manera correcta, entonces se retornar un mensaje informando de que se ha creado el registro de manera correcta, o por el contrario informa que el registro ya existe en la base de datos.
+
+```ts
+class PoliticalPartyDAO {
+    ...
+    protected static postPoliticalParty = async (sqlConfirm: string, sqlCreate: string, parameters: any, res: Response): Promise<any> => {
+        await connectionDB.pool.task(async query=> {
+            const { amount } = await query.one(sqlConfirm, parameters)
+            if (parseInt(amount) === 0) {
+                return await query.one(sqlCreate, parameters)
+            }
+            else {
+                return { partyId: 0, amount }
+            }
+        })
+            .then(({ partyId, amount }) => {
+                if (partyId !== 0) {
+                    return res.status(201).json({ ok: true, msg: 'Partido creado', newId: partyId })
+                }
+                else return res.status(400).json({ ok: false, msg: 'Partido ya existente', amount })
+            })
+            .catch((error: any) => {
+                console.log(red('Error'), error)
+                return res.status(400).json({ ok: false })
+            })
+    }
+}
+```
+
+### Controlador Insert Political Party
+
+Pasando al controlador, creamos un método que recupere la información enviada por por el body, y como en este caso solo es una propiedad, podemos aplicar desestructuración, luego llamamos el método del DAO en el que ingresamos las sentencias de confirmación y de creación del registro, junto al parámetro y a la variable de tipo de Response.
+
+```ts
+class PoliticalPartyController extends PoliticalPartyDAO {
+    ...
+    public postPoliticalParty = (req: Request, res: Response): void => {
+        const { politicalPartyName } = req.body
+        PoliticalPartyDAO.postPoliticalParty(SQL_POLITICAL_PARTY.CONFIRM, SQL_POLITICAL_PARTY.CREATE, [politicalPartyName], res)
+    }
+}
+```
+
+### Ruta Insert Political Party
+
+Dentro de las rutas, añadimos un nuevo endpoint, pero esta vez es con el verbo `POST` y llamará el método del controlador para añadir un nuevo partido político.
+
+```ts
+class PoliticalPartyRoutes {
+    ...
+    public config = (): void => {
+        ...
+        this.politicalPartyRoutes.post('/create', politicalPartyController.postPoliticalParty)
+    }
+}
+```

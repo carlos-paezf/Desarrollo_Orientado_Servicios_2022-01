@@ -13,9 +13,11 @@ class PoliticalPartyRoutes {
 
     /**
      * This is a method that is called when the class is instantiated. 
+     * It creates the routes for the political party controller.
      */
     public config = (): void => {
         this.politicalPartyRoutes.get('/', politicalPartyController.getPoliticalParties)
+        this.politicalPartyRoutes.post('/create', politicalPartyController.postPoliticalParty)
     }
 }
 

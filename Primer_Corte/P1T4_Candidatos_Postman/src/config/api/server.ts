@@ -49,8 +49,8 @@ class Server {
     public init = (): void => {
         this._app.listen(this._port, () => {
             console.log(green(`Server running locally on ${italic(`http://localhost:${this._port}`)}`))
-            console.log(`     - faculties ${italic.underline(`http://localhost:${this._port}${this._paths.political_parties}`)}`)
-            console.log(`     - professors ${italic.underline(`http://localhost:${this._port}${this._paths.candidates}`)}`)
+            console.log(`     - political parties ${italic.underline(`http://localhost:${this._port}${this._paths.political_parties}`)}`)
+            console.log(`     - candidates ${italic.underline(`http://localhost:${this._port}${this._paths.candidates}`)}`)
         })
     }
 }

@@ -14,6 +14,18 @@ class PoliticalPartyController extends PoliticalPartyDAO {
     public getPoliticalParties = (req: Request, res: Response): void => {
         PoliticalPartyDAO.getPoliticalParties(SQL_POLITICAL_PARTY.ALL, [], res)
     }
+
+    /**
+     * This is a function that will be called when the user request the `/political-parties/create` endpoint.
+     * It creates a political party.
+     * @param {Request} req - Request
+     * @param {Response} res - Response - This is the response object that is created when a request is
+     * made.
+     */
+    public postPoliticalParty = (req: Request, res: Response): void => {
+        const { politicalPartyName } = req.body
+        PoliticalPartyDAO.postPoliticalParty(SQL_POLITICAL_PARTY.CONFIRM, SQL_POLITICAL_PARTY.CREATE, [politicalPartyName], res)
+    }
 }
 
 
