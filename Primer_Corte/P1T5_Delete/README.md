@@ -474,6 +474,140 @@ const programRoutes = new ProgramRoutes()
 export default programRoutes.programRoutes
 ```
 
+## Semester
+
+### Semester Repository
+
+```ts
+export const SQL_SEMESTER = {
+    ALL: 'SELECT s.semester_id, s.semester_name FROM semester s',
+    CONFIRM: 'SELECT COUNT(s.semester_name) AS amount FROM semester s WHERE LOWER(s.semester_name) = LOWER($1)',
+    CREATE: 'INSERT INTO semester (semester_name) VALUES ($1) RETURNING semester_id'
+}
+```
+
+### Semester DAO (Data Access Object)
+
+#### Obtener todos los semestres
+
+```ts
+'use strict'
+
+import { Response } from 'express'
+import { red } from 'colors'
+
+import connectionDB from '../config/connection/connection_DB';
+
+
+class SemesterDao {
+    protected static getSemesters = async (sqlQuery: string, parameters: any, res: Response): Promise<any> => {
+        try {
+            const { rows } = await connectionDB.pool.result(sqlQuery, parameters)
+            return res.status(200).json({ ok: true, resultsQuery: rows })
+        } catch (error) {
+            console.log(red('Error: '), error)
+            return res.status(400).json({ ok: false })
+        }
+    }
+}
+
+
+export default SemesterDao
+```
+
+#### Crear un semestre
+
+```ts
+'use strict'
+
+import { Response } from 'express'
+import { red } from 'colors'
+
+import connectionDB from '../config/connection/connection_DB';
+
+
+class SemesterDao {
+    ...
+    protected static postSemester = async (sqlConfirm: string, sqlCreate: string, parameters: any, res: Response) => {
+        try {
+            const { semesterId, amount } = await connectionDB.pool.task(async query => {
+                const { amount } = await query.one(sqlConfirm, parameters)
+                if (parseInt(amount) === 0) {
+                    return await query.one(sqlCreate, parameters)
+                } else {
+                    return { semesterId: 0, amount }
+                }
+            })
+            if(semesterId !== 0) {
+                return res.status(201).json({ ok: true, msg: 'Semestre creado', newId: semesterId })
+            } 
+            else return res.status(400).json({ ok: false, msg: 'Semestre ya existente', amount })
+        } catch (error: any) {
+            console.log(red('Error: '), error)
+            return res.status(400).json({ ok: false })
+        }
+    }
+}
+
+
+export default SemesterDao
+```
+
+### Semester Controller
+
+```ts
+'use strict'
+
+import { Request, Response } from "express";
+
+import SemesterDao from "../daos/semester.dao";
+import { SQL_SEMESTER } from '../repositories/semester.sql';
+
+
+class SemesterController extends SemesterDao {
+    public getSemesters = (req: Request, res: Response): void => {
+        SemesterDao.getSemesters(SQL_SEMESTER.ALL, [], res)
+    }
+
+    public postSemester = (req: Request, res: Response): void => {
+        const { semesterName } = req.body
+        SemesterDao.postSemester(SQL_SEMESTER.CONFIRM, SQL_SEMESTER.CREATE, [semesterName], res)
+    }
+}
+
+
+const semesterController = new SemesterController()
+export default semesterController
+```
+
+### Semester Endpoints
+
+```ts
+'use strict'
+
+import { Router } from "express"
+import semesterController from '../controllers/semester.controller';
+
+
+class SemesterRoutes {
+    public semesterRoutes: Router
+
+    constructor() {
+        this.semesterRoutes = Router()
+        this.config()
+    }
+
+    public config = (): void => {
+        this.semesterRoutes.get('/', semesterController.getSemesters)
+        this.semesterRoutes.post('/create-semester', semesterController.postSemester)
+    }
+}
+
+
+const semesterRoutes = new SemesterRoutes()
+export default semesterRoutes.semesterRoutes
+```
+
 ## Server
 
 ```ts
@@ -491,6 +625,7 @@ class Server {
     private _port: string
     private _paths = {
         programs: '/api/programs',
+        semesters: '/api/semesters'
     }
 
     constructor() {
@@ -510,12 +645,14 @@ class Server {
 
     public routes = (): void => {
         this._app.use(this._paths.programs, programRoutes)
+        this._app.use(this._paths.semesters, semesterRoutes)
     }
 
     public init = (): void => {
         this._app.listen(this._port, () => {
             console.log(green(`Server running locally on ${italic(`http://localhost:${this._port}`)}`))
             console.log(`     - programs ${italic.underline(`http://localhost:${this._port}${this._paths.programs}`)}`)
+            console.log(`     - semesters ${italic.underline(`http://localhost:${this._port}${this._paths.semesters}`)}`)
         })
     }
 }
@@ -534,3 +671,7 @@ const server = new Server()
 console.clear()
 server.init()
 ```
+
+## Documentación de los Endpoints en Postman
+
+Podemos generar la documentación de la colección que administra todas las rutas de este proyecto, y hacerlas publicas en la web. Por ejemplo, para este caso, esta sería la documentación para este backend REST: [Endpoint Backend - Falso SAC](https://documenter.getpostman.com/view/8438809/UVktqtTL)

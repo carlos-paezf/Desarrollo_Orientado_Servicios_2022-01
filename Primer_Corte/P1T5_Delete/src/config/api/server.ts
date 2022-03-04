@@ -6,6 +6,7 @@ import morgan from 'morgan'
 import { green, italic } from 'colors'
 
 import programRoutes from '../../routes/program.routes'
+import semesterRoutes from '../../routes/semester.routes'
 
 
 class Server {
@@ -13,6 +14,7 @@ class Server {
     private _port: string
     private _paths = {
         programs: '/api/programs',
+        semesters: '/api/semesters'
     }
 
     constructor() {
@@ -38,6 +40,7 @@ class Server {
      */
     public routes = (): void => {
         this._app.use(this._paths.programs, programRoutes)
+        this._app.use(this._paths.semesters, semesterRoutes)
     }
 
     /**
@@ -47,6 +50,7 @@ class Server {
         this._app.listen(this._port, () => {
             console.log(green(`Server running locally on ${italic(`http://localhost:${this._port}`)}`))
             console.log(`     - programs ${italic.underline(`http://localhost:${this._port}${this._paths.programs}`)}`)
+            console.log(`     - semesters ${italic.underline(`http://localhost:${this._port}${this._paths.semesters}`)}`)
         })
     }
 }
