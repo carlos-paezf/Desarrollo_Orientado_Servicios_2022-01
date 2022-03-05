@@ -12,3 +12,4 @@ Enlace a otro curso de Node.JS: [Curso_Node.js](https://github.com/carlos-paezf/
 | Primer Taller                | [P1T2_Taller](./Primer_Corte/P1T2_Taller/README.md)                         |
 | Conectar PostgreSQL          | [P1T3_PostgreSQL](./Primer_Corte/P1T3_PostgreSQL/README.md)                 |
 | Probar Servicios con Postman | [P1T4_Candidatos_Postman](./Primer_Corte/P1T4_Candidatos_Postman/README.md) |
+| Uso del verbo Delete         | [P1T5_Delete](./Primer_Corte/P1T5_Delete/README.md)                         |
