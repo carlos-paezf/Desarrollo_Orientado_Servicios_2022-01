@@ -37,7 +37,7 @@ class SemesterDao {
             return res.status(200).json({ ok: true, resultsQuery: rows })
         } catch (error) {
             console.log(red('Error: '), error)
-            return res.status(400).json({ ok: false })
+            return res.status(500).json({ ok: false, msg: 'Comuníquese con el Administrador' })
         }
     }
 
@@ -84,7 +84,7 @@ class SemesterDao {
             else return res.status(400).json({ ok: false, msg: 'Semestre ya existente', amount })
         } catch (error: any) {
             console.log(red('Error: '), error)
-            return res.status(400).json({ ok: false })
+            return res.status(500).json({ ok: false, msg: 'Comuníquese con el Administrador' })
         }
     }
 }
