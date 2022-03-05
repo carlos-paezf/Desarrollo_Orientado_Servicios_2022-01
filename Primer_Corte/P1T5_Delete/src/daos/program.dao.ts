@@ -27,7 +27,8 @@ class ProgramDAO {
      * Otherwise, the response is a JSON object with the following structure:
      * ```json
      * {
-     *      oh: false
+     *      oh: false,
+     *      msg: "Comuníquese con el Administrador"
      * }
      * ```
      */
@@ -62,6 +63,13 @@ class ProgramDAO {
      *      ok: false,
      *      msg: "Programa ya existente",
      *      amount: "1"
+     * }
+     * ```
+     * In case the problem is with the backend, the response will be a JSON object with the following structure:
+     * ```json
+     * {
+     *      ok: false,
+     *      msg: "Comuníquese con el Administrador"
      * }
      * ```
      */
