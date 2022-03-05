@@ -24,10 +24,11 @@ class SemesterDao {
      *      ]
      * }
      * ```
-     * Otherwise, the response id a JSON object with the following structure:
+     * Otherwise, the response is a JSON object with the following structure:
      * ```json
      * {
-     *      ok: false
+     *      ok: false,
+     *      msg: "Comuníquese con el Administrador"
      * }
      * ```
      */
@@ -65,6 +66,13 @@ class SemesterDao {
      *      ok: false,
      *      msg: "Semestre ya existente",
      *      amount: "1"
+     * }
+     * ```
+     * In case the problem is with the backend, the response will be a JSON object with the following structure:
+     * ```json
+     * {
+     *      ok: false,
+     *      msg: "Comuníquese con el Administrador"
      * }
      * ```
      */
