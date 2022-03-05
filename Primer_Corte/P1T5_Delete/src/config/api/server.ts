@@ -7,6 +7,7 @@ import { green, italic } from 'colors'
 
 import programRoutes from '../../routes/program.routes'
 import semesterRoutes from '../../routes/semester.routes'
+import subjectRoutes from '../../routes/subject.routes'
 
 
 class Server {
@@ -14,7 +15,8 @@ class Server {
     private _port: string
     private _paths = {
         programs: '/api/programs',
-        semesters: '/api/semesters'
+        semesters: '/api/semesters',
+        subjects: '/api/subjects'
     }
 
     constructor() {
@@ -41,6 +43,7 @@ class Server {
     public routes = (): void => {
         this._app.use(this._paths.programs, programRoutes)
         this._app.use(this._paths.semesters, semesterRoutes)
+        this._app.use(this._paths.subjects, subjectRoutes)
     }
 
     /**
@@ -48,9 +51,11 @@ class Server {
      */
     public init = (): void => {
         this._app.listen(this._port, () => {
-            console.log(green(`Server running locally on ${italic(`http://localhost:${this._port}`)}`))
+            console.log(green(`Server running locally on ${italic(`http://localhost:${this._port}`)}\n\n`))
             console.log(`     - programs ${italic.underline(`http://localhost:${this._port}${this._paths.programs}`)}`)
             console.log(`     - semesters ${italic.underline(`http://localhost:${this._port}${this._paths.semesters}`)}`)
+            console.log(`     - subjects ${italic.underline(`http://localhost:${this._port}${this._paths.subjects}`)}`)
+            console.log('\n')
         })
     }
 }

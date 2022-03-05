@@ -348,7 +348,7 @@ export default connectionDB
 
 ```ts
 export const SQL_PROGRAMS = {
-    ALL: 'SELECT p.program_id, p.program_name FROM program p',
+    ALL: 'SELECT p.program_id, p.program_name FROM program p ORDER BY p.program_name',
     CONFIRM: 'SELECT COUNT(p.program_name) AS amount FROM program p WHERE LOWER(p.program_name) = LOWER($1)',
     CREATE: 'INSERT INTO program (program_name) VALUES ($1) RETURNING program_id'
 }
@@ -374,7 +374,7 @@ class ProgramDAO {
             return res.status(200).json({ ok: true, resultsQuery: rows })
         } catch (error) {
             console.log(red(`Error: `), error)
-            return res.status(400).json({ ok: false })
+            return res.status(500).json({ ok: false, msg: 'Comuníquese con el Administrador' })
         }
     }
 }
@@ -414,7 +414,7 @@ class ProgramDAO {
             })
             .catch((error: any) => {
                 console.log(red('Error'), error)
-                return res.status(400).json({ ok: false })
+                return res.status(500).json({ ok: false, msg: 'Comuníquese con el Administrador' })
             })
     }
 }
@@ -480,7 +480,7 @@ export default programRoutes.programRoutes
 
 ```ts
 export const SQL_SEMESTER = {
-    ALL: 'SELECT s.semester_id, s.semester_name FROM semester s',
+    ALL: 'SELECT s.semester_id, s.semester_name FROM semester s ORDER BY s.semester_name',
     CONFIRM: 'SELECT COUNT(s.semester_name) AS amount FROM semester s WHERE LOWER(s.semester_name) = LOWER($1)',
     CREATE: 'INSERT INTO semester (semester_name) VALUES ($1) RETURNING semester_id'
 }
@@ -506,7 +506,7 @@ class SemesterDao {
             return res.status(200).json({ ok: true, resultsQuery: rows })
         } catch (error) {
             console.log(red('Error: '), error)
-            return res.status(400).json({ ok: false })
+            return res.status(500).json({ ok: false, msg: 'Comuníquese con el Administrador' })
         }
     }
 }
@@ -544,7 +544,7 @@ class SemesterDao {
             else return res.status(400).json({ ok: false, msg: 'Semestre ya existente', amount })
         } catch (error: any) {
             console.log(red('Error: '), error)
-            return res.status(400).json({ ok: false })
+            return res.status(500).json({ ok: false, msg: 'Comuníquese con el Administrador' })
         }
     }
 }
@@ -608,6 +608,135 @@ const semesterRoutes = new SemesterRoutes()
 export default semesterRoutes.semesterRoutes
 ```
 
+## Subjects
+
+### Subjects Repository
+
+```ts
+export const SQL_SUBJECT = {
+    ALL: 'SELECT s.subject_id, s.subject_name, s.subject_reference FROM subjects s ORDER BY s.subject_name',
+    CONFIRM: 'SELECT COUNT(s.subject_reference) AS amount FROM subjects s WHERE LOWER(s.subject_reference) = LOWER($2)',
+    CREATE: 'INSERT INTO subjects (subject_name, subject_reference) VALUES ($1, $2) RETURNING subject_id'
+}
+```
+
+### Subjects DAO (Data Access Object)
+
+#### Obtener todos las materias
+
+```ts
+'use strict'
+
+import { Response } from 'express'
+import { red } from 'colors'
+import connectionDB from '../config/connection/connection_DB'
+
+
+class SubjectDAO {
+    protected static getSubjects = async (sqlQuery: string, parameters: any, res: Response): Promise<any> => {
+        try {
+            const { rows } = await connectionDB.pool.result(sqlQuery, parameters)
+            return res.status(200).json({ ok: true, resultsQuery: rows })
+        } catch (error) {
+            console.log(red('Error: '), error)
+            return res.status(500).json({ ok: false, msg: 'Comuníquese con el administrador' })
+        }
+    }
+}
+
+
+export default SubjectDAO
+```
+
+#### Crear una materia
+
+```ts
+'use strict'
+
+import { Response } from 'express'
+import { red } from 'colors'
+import connectionDB from '../config/connection/connection_DB'
+
+
+class SubjectDAO {
+    ...
+    protected static postSubject = async (sqlConfirm: string, sqlCreate: string, parameters: any, res: Response): Promise<any> => {
+        try {
+            const { subjectId, amount } = await connectionDB.pool.task(async query => {
+                const { amount } = await query.one(sqlConfirm, parameters)
+                if (amount === '0') {
+                    return query.one(sqlCreate, parameters)
+                } 
+                else return { subjectId: 0, amount }
+            })
+            if (subjectId !== 0) {
+                return res.status(201).json({ ok: true, msg: 'Materia creada', subjectId })
+            }
+            else return res.status(400).json({ ok: false, msg: 'Materia ya existente', amount })
+        } catch (error) {
+            console.log(red('Error: '), error)
+            return res.status(500).json({ ok: false, msg: 'Comuníquese con el administrador' })
+        }
+    }
+}
+
+
+export default SubjectDAO
+```
+
+### Subject Controller
+
+```ts
+import { Request, Response } from 'express'
+import SubjectDAO from '../daos/subject.dao'
+import { SQL_SUBJECT } from '../repositories/subject.sql';
+
+
+class SubjectController extends SubjectDAO {
+    public getSubjects = (req: Request, res: Response): void => {
+        SubjectDAO.getSubjects(SQL_SUBJECT.ALL, [], res)
+    }
+
+    public postSubject = (req: Request, res: Response): void => {
+        const { subjectName, subjectReference } = req.body
+        const params = [...subjectName, ...subjectReference]
+        SubjectDAO.postSubject(SQL_SUBJECT.CONFIRM, SQL_SUBJECT.CREATE, params, res)
+    }
+}
+
+
+const subjectController = new SubjectController()
+export default subjectController
+```
+
+### Subject Endpoints
+
+```ts
+'use strict'
+
+import { Router } from "express";
+import subjectController from "../controllers/subject.controller";
+
+
+class SubjectRoutes {
+    public subjectsRoutes: Router
+
+    constructor() {
+        this.subjectsRoutes = Router()
+        this.config()
+    }
+
+    public config = (): void => {
+        this.subjectsRoutes.get('/', subjectController.getSubjects)
+        this.subjectsRoutes.post('/create-subject', subjectController.postSubject)
+    }
+}
+
+
+const subjectsRoutes = new SubjectRoutes()
+export default subjectsRoutes.subjectsRoutes
+```
+
 ## Server
 
 ```ts
@@ -625,7 +754,8 @@ class Server {
     private _port: string
     private _paths = {
         programs: '/api/programs',
-        semesters: '/api/semesters'
+        semesters: '/api/semesters',
+        subjects: '/api/subjects'
     }
 
     constructor() {
@@ -646,6 +776,7 @@ class Server {
     public routes = (): void => {
         this._app.use(this._paths.programs, programRoutes)
         this._app.use(this._paths.semesters, semesterRoutes)
+        this._app.use(this._paths.subjects, subjectRoutes)
     }
 
     public init = (): void => {
@@ -653,6 +784,8 @@ class Server {
             console.log(green(`Server running locally on ${italic(`http://localhost:${this._port}`)}`))
             console.log(`     - programs ${italic.underline(`http://localhost:${this._port}${this._paths.programs}`)}`)
             console.log(`     - semesters ${italic.underline(`http://localhost:${this._port}${this._paths.semesters}`)}`)
+            console.log(`     - subjects ${italic.underline(`http://localhost:${this._port}${this._paths.subjects}`)}`)
+            console.log('\n')
         })
     }
 }
