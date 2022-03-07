@@ -28,11 +28,11 @@ INSERT INTO semester (semester_name) VALUES ('Semestre 10');
 /* Table: Subjects                                                 */
 /* =============================================================== */
 
-INSERT INTO subjects (subject_name, subject_reference) VALUES ('Desarrollo Orientado a Servicios', 'IS');
-INSERT INTO subjects (subject_name, subject_reference) VALUES ('POO', 'IS');
-INSERT INTO subjects (subject_name, subject_reference) VALUES ('UI/UX', 'IS');
-INSERT INTO subjects (subject_name, subject_reference) VALUES ('Práctica Empresarial', 'IS');
-INSERT INTO subjects (subject_name, subject_reference) VALUES ('Trabajo de Grado I', 'IS');
+INSERT INTO subjects (subject_name, subject_reference) VALUES ('Desarrollo Orientado a Servicios', 'ISDOS');
+INSERT INTO subjects (subject_name, subject_reference) VALUES ('POO', 'ISPOO');
+INSERT INTO subjects (subject_name, subject_reference) VALUES ('UI/UX', 'ISUIUX');
+INSERT INTO subjects (subject_name, subject_reference) VALUES ('Práctica Empresarial', 'ISPE');
+INSERT INTO subjects (subject_name, subject_reference) VALUES ('Trabajo de Grado I', 'ISTGI');
 
 
 /* =============================================================== */
