@@ -148,7 +148,7 @@ CREATE UNIQUE INDEX index_program_name ON program (program_name);
 
 ALTER TABLE pensum OWNER TO user_node;
 ALTER TABLE pensum ADD CONSTRAINT
-    FK_PROGRAM_PENSUM FOREIGN KEY(pensum_id)
+    FK_PROGRAM_PENSUM FOREIGN KEY(program_id)
     REFERENCES program (program_id)
     ON DELETE restrict ON UPDATE cascade;
 
@@ -737,6 +737,143 @@ const subjectsRoutes = new SubjectRoutes()
 export default subjectsRoutes.subjectsRoutes
 ```
 
+## Pensum
+
+### Pensum Repository
+
+```ts
+export const SQL_PENSUM = {
+    ALL: 'SELECT p.pensum_id, p.program_id, pr.program_name, p.pensum_name \
+        FROM pensum p, program pr \
+        WHERE p.program_id = pr.program_id \
+        ORDER BY pr.program_name',
+    CONFIRM_PROGRAM: 'SELECT COUNT(pr.program_id) AS program_amount \
+        FROM program pr \
+        WHERE pr.program_id = $1',
+    CONFIRM_PENSUM: 'SELECT COUNT(p.pensum_name) AS amount \
+        FROM pensum p \
+        WHERE LOWER(p.pensum_name) = LOWER($2)',
+    CREATE: 'INSERT INTO pensum (program_id, pensum_name) \
+        VALUES ($1, $2) \
+        RETURNING pensum_id'
+}
+```
+
+### Pensum DAO (Data Access Object)
+
+#### Obtener todos los pensum
+
+```ts
+import { Response } from 'express'
+import { red } from 'colors'
+
+import connectionDB from '../config/connection/connection_DB';
+
+
+class PensumDAO {
+    protected static getPensums = async (sqlQuery: string, params: any, res: Response): Promise<any> => {
+        try {
+            const { rows } = await connectionDB.pool.result(sqlQuery, params)
+            return res.status(200).json({ ok: true, resultsQuery: rows })
+        } catch (error) {
+            console.log(red('Error: '), error)
+            return res.status(500).json({ ok: false, msg: 'Comuníquese con el Administrador' })
+        }
+    }
+}
+
+
+export default PensumDAO
+```
+
+#### Crear un Pensum
+
+```ts
+import { Response } from 'express'
+import { red } from 'colors'
+
+import connectionDB from '../config/connection/connection_DB';
+
+
+class PensumDAO {
+    ...
+    protected static postPensum = async (sqlConfirmProgram: string, sqlConfirmPensum: string, sqlCreate: string, params: any, res: Response): Promise<any> => {
+        try {
+            const { programAmount } = await connectionDB.pool.one(sqlConfirmProgram, params)
+            if (parseInt(programAmount) === 0) {
+                return res.status(400).json({ ok: false, msg: `No existe ningún programa con el id ${params[0]}` })
+            }
+            const { pensumId, amount } = await connectionDB.pool.task(async query => {
+                const { amount } = await query.one(sqlConfirmPensum, params)
+                if (amount === '0') return query.one(sqlCreate, params)
+                return { pensumId: 0, amount }
+            })
+            if (pensumId !== 0) {
+                return res.status(201).json({ ok: true, msg: 'Pensum creado', newId: pensumId })
+            }
+            return res.status(400).json({ ok: false, msg: 'Pensum ya existente', amount })
+        } catch (error) {
+            console.log(red('Error: '), error)
+            return res.status(500).json({ ok: false, msg: 'Comuníquese con el Administrador' })
+        }
+    }
+}
+
+
+export default PensumDAO
+```
+
+### Pensum Controller
+
+```ts
+import { Request, Response } from 'express'
+import PensumDAO from '../daos/pensum.dao';
+import { SQL_PENSUM } from '../repositories/pensum.repository';
+
+
+class PensumController extends PensumDAO {
+    public getPensums = (req: Request, res: Response): void => {
+        PensumDAO.getPensums(SQL_PENSUM.ALL, [], res)
+    }
+
+    public postPensum = (req: Request, res: Response): void => {
+        const { programId, pensumName } = req.body
+        const params = [programId, pensumName]
+        PensumDAO.postPensum(SQL_PENSUM.CONFIRM_PROGRAM, SQL_PENSUM.CONFIRM_PENSUM, SQL_PENSUM.CREATE, params, res)
+    }
+}
+
+
+const pensumController = new PensumController()
+export default pensumController
+```
+
+### Pensum Endpoints
+
+```ts
+import { Router } from "express";
+import pensumController from "../controllers/pensum.controller";
+
+
+class PensumRoutes {
+    public pensumRoutes: Router
+
+    constructor() {
+        this.pensumRoutes = Router()
+        this.config()
+    }
+
+    public config = (): void => {
+        this.pensumRoutes.get('/', pensumController.getPensums)
+        this.pensumRoutes.post('/create-pensum', pensumController.postPensum)
+    }
+}
+
+
+const pensumRoutes = new PensumRoutes()
+export default pensumRoutes.pensumRoutes
+```
+
 ## Server
 
 ```ts
@@ -755,7 +892,8 @@ class Server {
     private _paths = {
         programs: '/api/programs',
         semesters: '/api/semesters',
-        subjects: '/api/subjects'
+        subjects: '/api/subjects',
+        pensums: '/api/pensums'
     }
 
     constructor() {
@@ -777,6 +915,7 @@ class Server {
         this._app.use(this._paths.programs, programRoutes)
         this._app.use(this._paths.semesters, semesterRoutes)
         this._app.use(this._paths.subjects, subjectRoutes)
+        this._app.use(this._paths.pensums, pensumRoutes)
     }
 
     public init = (): void => {
@@ -785,6 +924,7 @@ class Server {
             console.log(`     - programs ${italic.underline(`http://localhost:${this._port}${this._paths.programs}`)}`)
             console.log(`     - semesters ${italic.underline(`http://localhost:${this._port}${this._paths.semesters}`)}`)
             console.log(`     - subjects ${italic.underline(`http://localhost:${this._port}${this._paths.subjects}`)}`)
+            console.log(`     - pensums ${italic.underline(`http://localhost:${this._port}${this._paths.pensums}`)}`)
             console.log('\n')
         })
     }
