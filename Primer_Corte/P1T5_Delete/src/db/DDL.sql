@@ -73,7 +73,7 @@ CREATE UNIQUE INDEX index_program_name ON program (program_name);
 
 ALTER TABLE pensum OWNER TO user_node;
 ALTER TABLE pensum ADD CONSTRAINT
-    FK_PROGRAM_PENSUM FOREIGN KEY(pensum_id)
+    FK_PROGRAM_PENSUM FOREIGN KEY(program_id)
     REFERENCES program (program_id)
     ON DELETE restrict ON UPDATE cascade;
 
