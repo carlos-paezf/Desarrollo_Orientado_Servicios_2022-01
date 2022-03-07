@@ -14,8 +14,8 @@ class SubjectDAO {
      * @returns If everything is fine, the response is a JSON object with the following structure:
      * ```json
      * {
-     *      ok: true,
-     *      resultsQuery: [
+     *      "ok": true,
+     *      "resultsQuery": [
      *          {
      *              "subjectId": 1,
      *              "subjectName": "Desarrollo Orientado a Servicios",
@@ -27,8 +27,8 @@ class SubjectDAO {
      * Otherwise, the response is a JSON object with the following structure:
      * ```json
      * {
-     *      ok: false,
-     *      msg: "Comuníquese con el Administrador"
+     *      "ok": false,
+     *      "msg": "Comuníquese con el Administrador"
      * }
      * ```
      */
@@ -44,7 +44,7 @@ class SubjectDAO {
 
     /**
      * It creates a new Subject
-     * This is a functions that will be used to creat a semester register.
+     * This is a function that will be used to creat a semester register.
      * @param {string} sqlConfirm - The SQL query that will be used to check if the semester already exists
      * @param {string} sqlCreate - The SQL query to create the semester
      * @param {any} parameters 
@@ -53,24 +53,24 @@ class SubjectDAO {
      * If everything is fine, the response is a JSON object with the following structure:
      * ```json
      * {
-     *      ok: true,
-     *      msg: "Materia creada",
-     *      newId: 1
+     *      "ok": true,
+     *      "msg": "Materia creada",
+     *      "newId": 1
      * }
      * ```
      * Otherwise, the response is a JSON object with the following structure:
      * ```json
      * {
-     *      ok: false,
-     *      msg: "Materia ya existente",
-     *      amount: "1"
+     *      "ok": false,
+     *      "msg": "Materia ya existente",
+     *      "amount": "1"
      * }
      * ```
      * In case the problem is with the backend, the response will be a JSON object with the following structure:
      * ```json
      * {
-     *      ok: false,
-     *      msg: "Comuníquese con el Administrador"
+     *      "ok": false,
+     *      "msg": "Comuníquese con el Administrador"
      * }
      * ```
      */
