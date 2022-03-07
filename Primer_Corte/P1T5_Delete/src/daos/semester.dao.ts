@@ -15,8 +15,8 @@ class SemesterDao {
      * @returns If everything is fine, the response is a JSON object with the following structure:
      * ```json
      * {
-     *      ok: true,
-     *      resultsQuery: [
+     *      "ok": true,
+     *      "resultsQuery": [
      *          {
      *              "semesterId": 1,
      *              "semesterName": "Semestre 1"
@@ -27,8 +27,8 @@ class SemesterDao {
      * Otherwise, the response is a JSON object with the following structure:
      * ```json
      * {
-     *      ok: false,
-     *      msg: "Comuníquese con el Administrador"
+     *      "ok": false,
+     *      "msg": "Comuníquese con el Administrador"
      * }
      * ```
      */
@@ -45,7 +45,7 @@ class SemesterDao {
 
     /**
      * It creates a new semester.
-     * This is a functions that will be used to create a semester register.
+     * This is a function that will be used to create a semester register.
      * @param {string} sqlConfirm - The SQL query that will be used to check if the semester already
      * exists.
      * @param {string} sqlCreate - The SQL query to create the semester.
@@ -55,24 +55,24 @@ class SemesterDao {
      * If everything is fine, the response is a JSON object with the following structure:
      * ```json
      * {
-     *      ok: true,
-     *      msg: "Semestre creado",
-     *      newId: 1
+     *      "ok": true,
+     *      "msg": "Semestre creado",
+     *      "newId": 1
      * }
      * ```
      * Otherwise, the response is a JSON object with the following structure:
      * ```json
      * {
-     *      ok: false,
-     *      msg: "Semestre ya existente",
-     *      amount: "1"
+     *      "ok": false,
+     *      "msg": "Semestre ya existente",
+     *      "amount": "1"
      * }
      * ```
      * In case the problem is with the backend, the response will be a JSON object with the following structure:
      * ```json
      * {
-     *      ok: false,
-     *      msg: "Comuníquese con el Administrador"
+     *      "ok": false,
+     *      "msg": "Comuníquese con el Administrador"
      * }
      * ```
      */
