@@ -15,8 +15,8 @@ class ProgramDAO {
      * @returns If everything is fine, the response is a JSON object with the following structure:
      * ```json
      * {
-     *      ok: true,
-     *      resultsQuery: [
+     *      "ok": true,
+     *      "resultsQuery": [
      *          {
      *              "programId": 1,
      *              "programName": "Ingeniería de Sistemas"
@@ -27,8 +27,8 @@ class ProgramDAO {
      * Otherwise, the response is a JSON object with the following structure:
      * ```json
      * {
-     *      oh: false,
-     *      msg: "Comuníquese con el Administrador"
+     *      "oh": false,
+     *      "msg": "Comuníquese con el Administrador"
      * }
      * ```
      */
@@ -52,24 +52,24 @@ class ProgramDAO {
      * @returns If everything is fine, the response is a JSON object with the following structure:
      * ```json
      * {
-     *      ok: true,
-     *      msg: "Programa creado",
-     *      newId: 1
+     *      "ok": true,
+     *      "msg": "Programa creado",
+     *      "newId": 1
      * }
      * ```
      * Otherwise, the response is a JSON object with the following structure:
      * ```json
      * {
-     *      ok: false,
-     *      msg: "Programa ya existente",
-     *      amount: "1"
+     *      "ok": false,
+     *      "msg": "Programa ya existente",
+     *      "amount": "1"
      * }
      * ```
      * In case the problem is with the backend, the response will be a JSON object with the following structure:
      * ```json
      * {
-     *      ok: false,
-     *      msg: "Comuníquese con el Administrador"
+     *      "ok": false,
+     *      "msg": "Comuníquese con el Administrador"
      * }
      * ```
      */
