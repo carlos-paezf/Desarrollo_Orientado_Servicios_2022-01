@@ -2,11 +2,11 @@
 
 import { Request, Response } from "express";
 
-import SemesterDao from "../daos/semester.dao";
+import SemesterDAO from "../daos/semester.dao";
 import { SQL_SEMESTER } from '../repositories/semester.sql';
 
 
-class SemesterController extends SemesterDao {
+class SemesterController extends SemesterDAO {
     /**
      * This is a function that will be called when the user request the `/semesters` endpoint.
      * It gets all semesters from the database.
@@ -14,7 +14,7 @@ class SemesterController extends SemesterDao {
      * @param {Response} res - Response - The response object that is passed back to the client
      */
     public getSemesters = (req: Request, res: Response): void => {
-        SemesterDao.getSemesters(SQL_SEMESTER.ALL, [], res)
+        SemesterDAO.getSemesters(SQL_SEMESTER.ALL, [], res)
     }
 
     /**
@@ -24,7 +24,7 @@ class SemesterController extends SemesterDao {
      */
     public postSemester = (req: Request, res: Response): void => {
         const { semesterName } = req.body
-        SemesterDao.postSemester(SQL_SEMESTER.CONFIRM, SQL_SEMESTER.CREATE, [semesterName], res)
+        SemesterDAO.postSemester(SQL_SEMESTER.CONFIRM, SQL_SEMESTER.CREATE, [semesterName], res)
     }
 }
 

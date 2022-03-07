@@ -6,7 +6,7 @@ import { red } from 'colors'
 import connectionDB from '../config/connection/connection_DB';
 
 
-class SemesterDao {
+class SemesterDAO {
     /**
      * This is a function that will be user to get the semesters information.
      * @param {string} sqlQuery - The SQL query to execute.
@@ -98,4 +98,4 @@ class SemesterDao {
 }
 
 
-export default SemesterDao
+export default SemesterDAO
