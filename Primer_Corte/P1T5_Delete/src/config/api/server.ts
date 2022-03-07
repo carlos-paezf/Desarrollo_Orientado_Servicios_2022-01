@@ -9,6 +9,7 @@ import programRoutes from '../../routes/program.routes'
 import semesterRoutes from '../../routes/semester.routes'
 import subjectRoutes from '../../routes/subject.routes'
 import pensumRoutes from '../../routes/pensum.routes'
+import pensumSubjectRoutes from '../../routes/pensum-subject.routes'
 
 
 class Server {
@@ -18,7 +19,8 @@ class Server {
         programs: '/api/programs',
         semesters: '/api/semesters',
         subjects: '/api/subjects',
-        pensums: '/api/pensums'
+        pensums: '/api/pensums',
+        pensumSubject: '/api/pensum-subject'
     }
 
     constructor() {
@@ -47,6 +49,7 @@ class Server {
         this._app.use(this._paths.semesters, semesterRoutes)
         this._app.use(this._paths.subjects, subjectRoutes)
         this._app.use(this._paths.pensums, pensumRoutes)
+        this._app.use(this._paths.pensumSubject, pensumSubjectRoutes)
     }
 
     /**
@@ -59,6 +62,7 @@ class Server {
             console.log(`     - semesters ${italic.underline(`http://localhost:${this._port}${this._paths.semesters}`)}`)
             console.log(`     - subjects ${italic.underline(`http://localhost:${this._port}${this._paths.subjects}`)}`)
             console.log(`     - pensums ${italic.underline(`http://localhost:${this._port}${this._paths.pensums}`)}`)
+            console.log(`     - pensum-subject ${italic.underline(`http://localhost:${this._port}${this._paths.pensumSubject}`)}`)
             console.log('\n')
         })
     }

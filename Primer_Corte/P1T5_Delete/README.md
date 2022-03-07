@@ -874,6 +874,160 @@ const pensumRoutes = new PensumRoutes()
 export default pensumRoutes.pensumRoutes
 ```
 
+## Pensum-Subject
+
+### Pensum-Subject Repository
+
+```ts
+export const SQL_PENSUM_SUBJECT = {
+    ALL: 'SELECT ps.pensum_id, p.pensum_name, ps.semester_id, s.semester_name, ps.subject_id, su.subject_name \
+        FROM pensum_subject ps, pensum p, semester s, subjects su \
+        WHERE ps.pensum_id = p.pensum_id AND ps.semester_id = s.semester_id AND ps.subject_id = su.subject_id \
+        ORDER BY ps.pensum_id',
+    CONFIRM_PENSUM: 'SELECT COUNT(p.pensum_id) AS pensum_amount\
+        FROM pensum p \
+        WHERE p.pensum_id = $1',
+    CONFIRM_SUBJECT: 'SELECT COUNT(su.subject_id) AS subject_amount \
+        FROM subjects su \
+        WHERE su.subject_id = $1',
+    CONFIRM_SEMESTER: 'SELECT COUNT(s.semester_id) AS semester_amount \
+        FROM semester s \
+        WHERE s.semester_id = $1',
+    CONFIRM_PENSUM_SUBJECT: 'SELECT COUNT(ps.pensum_id) AS p_amount, COUNT(ps.subject_id) AS s_amount \
+        FROM pensum_subject ps \
+        WHERE ps.pensum_id = $1 AND ps.subject_id = $2',
+    CREATE: 'INSERT INTO pensum_subject (pensum_id, subject_id, semester_id) \
+        VALUES ($1, $2, $3) \
+        RETURNING pensum_id, subject_id, semester_id'
+}
+```
+
+### Pensum-Subject DAO (Data Access Object)
+
+#### Obtener todos los pensum-subject
+
+```ts
+import { Response } from 'express'
+import { red } from 'colors'
+import connectionDB from '../config/connection/connection_DB';
+
+
+class PensumSubjectDAO {
+    protected static getPensumSubject = async (sqlQuery: string, params: any, res: Response) => {
+        try {
+            const { rows } = await connectionDB.pool.result(sqlQuery, params)
+            return res.status(200).json({ ok: true, resultQuery: rows }) 
+        } catch (error) {
+            console.log(red('Error'), error)
+            return res.status(500).json({ ok: false, msg: 'Comuníquese con el administrador' })
+        }
+    }
+}
+
+
+export default PensumSubjectDAO
+```
+
+#### Postear un nuevo pensum-subject
+
+```ts
+import { Response } from 'express'
+import { red } from 'colors'
+import connectionDB from '../config/connection/connection_DB';
+
+
+class PensumSubjectDAO {
+    ...
+    protected static postPensumSubject = async (sqlConfirmPensum: string, sqlConfirmSubject: string, sqlConfirmSemester: string, sqlConfirmPensumSubject: string, sqlCreate: string, params: any, res: Response) => {
+        try {
+            const { pensumAmount } = await connectionDB.pool.one(sqlConfirmPensum, params[0])
+            const { subjectAmount } = await connectionDB.pool.one(sqlConfirmSubject, params[1])
+            const { semesterAmount } = await connectionDB.pool.one(sqlConfirmSemester, params[2])
+            if (pensumAmount === '0') return res.status(400).json({ ok: false, msg: `No hay pensum con el id ${params[0]}` })
+            if (subjectAmount === '0') return res.status(400).json({ ok: false, msg: `No hay materias con el id ${params[1]}` })
+            if (semesterAmount === '0') return res.status(400).json({ ok: false, msg: `No hay semestres con el id ${params[2]}` })
+
+            const { pensumId, subjectId, semesterId } = await connectionDB.pool.task(async query => {
+                const { pAmount, sAmount } = await query.one(sqlConfirmPensumSubject, params)
+                if (pAmount !== '0' && sAmount !== '0') {
+                    return { pensumId: 0, subjectId: 0, semesterId: 0 }
+                }
+                else return query.one(sqlCreate, params)
+            })
+            if (pensumId === 0 && subjectId === 0 && semesterId === 0) {
+                return res.status(400).json({ ok: false, msg: 'Ya existe una relación del pensum con la materia' })
+            }
+            return res.status(201).json({ ok: true, msg: 'Relación pensum-materia ha sido creada', pensumId, subjectId, semesterId })
+        } catch (error) {
+            console.log(red('Error: '), error)
+            return res.status(500).json({ ok: false, msg: 'Comuníquese con el Administrador' })
+        }
+    }
+}
+
+
+export default PensumSubjectDAO
+```
+
+### Pensum-Subject Controller
+
+```ts
+import { Request, Response } from 'express'
+import PensumSubjectDAO from '../daos/pensum-subject.dao';
+import { SQL_PENSUM_SUBJECT } from '../repositories/pensum-subject.repository';
+
+
+class PensumSubjectController extends PensumSubjectDAO {
+    public getPensumSubject = (req: Request, res: Response) => {
+        PensumSubjectDAO.getPensumSubject(SQL_PENSUM_SUBJECT.ALL, [], res)
+    }
+
+    public postPensumSubject = (req: Request, res: Response) => {
+        const { pensumId, subjectId, semesterId } = req.body
+        const params = [pensumId, subjectId, semesterId]
+        PensumSubjectDAO.postPensumSubject(
+            SQL_PENSUM_SUBJECT.CONFIRM_PENSUM,
+            SQL_PENSUM_SUBJECT.CONFIRM_SUBJECT,
+            SQL_PENSUM_SUBJECT.CONFIRM_SEMESTER,
+            SQL_PENSUM_SUBJECT.CONFIRM_PENSUM_SUBJECT,
+            SQL_PENSUM_SUBJECT.CREATE,
+            params,
+            res
+        )
+    }
+}
+
+
+const pensumSubjectController = new PensumSubjectController()
+export default pensumSubjectController
+```
+
+### Pensum-Subject Endpoints
+
+```ts
+import { Router } from 'express'
+import pensumSubjectController from '../controllers/pensum-subject.controller';
+
+
+class PensumSubjectRoutes {
+    public pensumSubjectRoutes: Router
+
+    constructor() {
+        this.pensumSubjectRoutes = Router()
+        this.config()
+    }
+
+    public config = () => {
+        this.pensumSubjectRoutes.get('/', pensumSubjectController.getPensumSubject)
+        this.pensumSubjectRoutes.post('/create-pensum-subject', pensumSubjectController.postPensumSubject)
+    }
+}
+
+
+const pensumSubjectRoutes = new PensumSubjectRoutes()
+export default pensumSubjectRoutes.pensumSubjectRoutes
+```
+
 ## Server
 
 ```ts
@@ -883,7 +1037,12 @@ import express, { Application, json, urlencoded } from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
 import { green, italic } from 'colors'
+
 import programRoutes from '../../routes/program.routes'
+import semesterRoutes from '../../routes/semester.routes'
+import subjectRoutes from '../../routes/subject.routes'
+import pensumRoutes from '../../routes/pensum.routes'
+import pensumSubjectRoutes from '../../routes/pensum-subject.routes'
 
 
 class Server {
@@ -893,7 +1052,8 @@ class Server {
         programs: '/api/programs',
         semesters: '/api/semesters',
         subjects: '/api/subjects',
-        pensums: '/api/pensums'
+        pensums: '/api/pensums',
+        pensumSubject: '/api/pensum-subject'
     }
 
     constructor() {
@@ -910,21 +1070,23 @@ class Server {
         this._app.use(json({ limit: '100mb' }))
         this._app.use(urlencoded({ extended: true }))
     }
-
+    
     public routes = (): void => {
         this._app.use(this._paths.programs, programRoutes)
         this._app.use(this._paths.semesters, semesterRoutes)
         this._app.use(this._paths.subjects, subjectRoutes)
         this._app.use(this._paths.pensums, pensumRoutes)
+        this._app.use(this._paths.pensumSubject, pensumSubjectRoutes)
     }
 
     public init = (): void => {
         this._app.listen(this._port, () => {
-            console.log(green(`Server running locally on ${italic(`http://localhost:${this._port}`)}`))
+            console.log(green(`Server running locally on ${italic(`http://localhost:${this._port}`)}\n\n`))
             console.log(`     - programs ${italic.underline(`http://localhost:${this._port}${this._paths.programs}`)}`)
             console.log(`     - semesters ${italic.underline(`http://localhost:${this._port}${this._paths.semesters}`)}`)
             console.log(`     - subjects ${italic.underline(`http://localhost:${this._port}${this._paths.subjects}`)}`)
             console.log(`     - pensums ${italic.underline(`http://localhost:${this._port}${this._paths.pensums}`)}`)
+            console.log(`     - pensum-subject ${italic.underline(`http://localhost:${this._port}${this._paths.pensumSubject}`)}`)
             console.log('\n')
         })
     }
