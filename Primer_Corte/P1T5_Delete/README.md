@@ -691,7 +691,10 @@ export default semesterRoutes.semesterRoutes
 export const SQL_SUBJECT = {
     ALL: 'SELECT s.subject_id, s.subject_name, s.subject_reference FROM subjects s ORDER BY s.subject_name',
     CONFIRM: 'SELECT COUNT(s.subject_reference) AS amount FROM subjects s WHERE LOWER(s.subject_reference) = LOWER($2)',
-    CREATE: 'INSERT INTO subjects (subject_name, subject_reference) VALUES ($1, $2) RETURNING subject_id'
+    CREATE: 'INSERT INTO subjects (subject_name, subject_reference) VALUES ($1, $2) RETURNING subject_id',
+    SELECT_ONE: 'SELECT s.subject_id, s.subject_name FROM subjects s WHERE s.subject_id = $1',
+    CONFIRM_ONE: 'SELECT COUNT(s.subject_id) AS amount FROM subjects s WHERE s.subject_id = $1',
+    DELETE_ONE: 'DELETE FROM subjects s WHERE s.subject = $1'
 }
 ```
 
@@ -759,6 +762,64 @@ class SubjectDAO {
 export default SubjectDAO
 ```
 
+#### Obtener una materia por su id
+
+```ts
+'use strict'
+
+import { Response } from 'express'
+import { red } from 'colors'
+import connectionDB from '../config/connection/connection_DB'
+
+
+class SubjectDAO {
+    ...
+    protected static getOneSubjectById = async (sqlConfirm: string, sqlQuery: string, params: any, res: Response): Promise<any> => {
+        try {
+            const { amount } = await connectionDB.pool.one(sqlConfirm, params)
+            if (amount === '0') return res.status(400).json({ ok: false, msg: `No existe ninguna materia con el id ${params[0]}` })
+            const { subjectId, subjectName, subjectReference } = await connectionDB.pool.one(sqlQuery, params)
+            return res.status(200).json({ ok: true, data: { subjectId, subjectName, subjectReference } })
+        } catch (error) {
+            console.log(red('Error: '), error)
+            return res.status(500).json({ ok: false, msg: 'Comuníquese con el Administrador' })
+        }
+    }
+}
+
+
+export default SubjectDAO
+```
+
+#### Eliminar una materia por su id
+
+```ts
+'use strict'
+
+import { Response } from 'express'
+import { red } from 'colors'
+import connectionDB from '../config/connection/connection_DB'
+
+
+class SubjectDAO {
+    ...
+    protected static deleteOneSubjectById = async (sqlConfirm: string, sqlDelete: string, params: any, res: Response): Promise<any> => {
+        try {
+            const { amount } = await connectionDB.pool.one(sqlConfirm, params)
+            if (amount === '0') return res.status(400).json({ ok: false, msg: `No existe ninguna materia con el id ${params[0]}` })
+            const { rowCount } = await connectionDB.pool.result(sqlDelete, params)
+            return res.status(200).json({ ok: true, msg: `La materia con el id ${params[0]} ha sido eliminada`, affectedRows: rowCount })
+        } catch(error) {
+            console.log(red('Error: '), error)
+            return res.status(500).json({ ok: false, msg: 'Comuníquese con el administrador' })
+        }
+    }
+}
+
+
+export default SubjectDAO
+```
+
 ### Subject Controller
 
 ```ts
@@ -776,6 +837,16 @@ class SubjectController extends SubjectDAO {
         const { subjectName, subjectReference } = req.body
         const params = [...subjectName, ...subjectReference]
         SubjectDAO.postSubject(SQL_SUBJECT.CONFIRM, SQL_SUBJECT.CREATE, params, res)
+    }
+
+    public getOneSubjectById = (req: Request, res: Response): void => {
+        const { subjectId } = req.params
+        SubjectDAO.getOneSubjectById(SQL_SUBJECT.CONFIRM_ONE, SQL_SUBJECT.SELECT_ONE, [subjectId], res)
+    }
+
+    public deleteOneSubjectById = (req: Request, res: Response): void => {
+        const { subjectId } = req.params
+        SubjectDAO.deleteOneSubjectById(SQL_SUBJECT.CONFIRM, SQL_SUBJECT.DELETE_ONE, [subjectId], res)
     }
 }
 
@@ -803,7 +874,9 @@ class SubjectRoutes {
 
     public config = (): void => {
         this.subjectsRoutes.get('/', subjectController.getSubjects)
+        this.subjectsRoutes.get('/:subjectId', subjectController.getOneSubjectById)
         this.subjectsRoutes.post('/create-subject', subjectController.postSubject)
+        this.subjectsRoutes.delete('/:subjectId', subjectController.deleteOneSubjectById)
     }
 }
 

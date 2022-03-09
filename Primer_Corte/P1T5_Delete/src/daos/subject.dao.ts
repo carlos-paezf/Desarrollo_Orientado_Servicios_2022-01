@@ -92,6 +92,91 @@ class SubjectDAO {
             return res.status(500).json({ ok: false, msg: 'Comuníquese con el administrador' })
         }
     }
+
+    /**
+     * It gets one subject by id.
+     * @param {string} sqlConfirm - The SQL query that will be executed to confirm if the subject exists.
+     * @param {string} sqlQuery - The query to be executed.
+     * @param {any} params - any
+     * @param {Response} res - Response
+     * @returns If everything is fine, the response is a JSON object with the following structure:
+     * ```json
+     * {
+     *      "ok": true,
+     *      "data": {
+     *          "subjectId": "1",
+     *          "subjectName": "DOS",
+     *          "subjectReference": "ISDOS" 
+     *      }
+     * }
+     * ```
+     * If the subject does not exists, the response is a JSON object with the following structure:
+     * ```json
+     * {
+     *      "ok": true,
+     *      "msg": "No existe una materia con el id 0"
+     * }
+     * ```
+     * In case the problem is with the backend, the response will be a JSON object with the following structure:
+     * ```json
+     * {
+     *      "ok": false,
+     *      "msg": "Comuníquese con el Administrador"
+     * }
+     * ```
+     */
+    protected static getOneSubjectById = async (sqlConfirm: string, sqlQuery: string, params: any, res: Response): Promise<any> => {
+        try {
+            const { amount } = await connectionDB.pool.one(sqlConfirm, params)
+            if (amount === '0') return res.status(400).json({ ok: false, msg: `No existe ninguna materia con el id ${params[0]}` })
+            const { subjectId, subjectName, subjectReference } = await connectionDB.pool.one(sqlQuery, params)
+            return res.status(200).json({ ok: true, data: { subjectId, subjectName, subjectReference } })
+        } catch (error) {
+            console.log(red('Error: '), error)
+            return res.status(500).json({ ok: false, msg: 'Comuníquese con el Administrador' })
+        }
+    }
+
+    /**
+     * Its delete one program by id.
+     * @param {string} sqlConfirm - The SQL query to confirm that the program exists. 
+     * @param {string} sqlDelete - The SQL query to delete the program.
+     * @param {any} params - any
+     * @param {Response} res - Response
+     * @returns If everything is fine, the response is a JSON object with the following structure:
+     * ```json
+     * {
+     *      "ok": true,
+     *      "msg": "La materia con el id 0 ha sido eliminado",
+     *      "affectedRows": 1
+     * }
+     * ```
+     * In case the entered ID does not exists, the response is a JSON object with the following structure:
+     * ```json
+     * {
+     *      "ok": false,
+     *      "msg": "No existe ninguna materia con el id 0"
+     * }
+     * ```
+     * In case the problem is with the backend, the response will be a JSON object with the following structure:
+     * ```json
+     * {
+     *      "ok": false,
+     *      "msg": "Comuníquese con el Administrador"
+     * }
+     * ```
+     */
+    protected static deleteOneSubjectById = async (sqlConfirm: string, sqlDelete: string, params: any, res: Response): Promise<any> => {
+        try {
+            const { amount } = await connectionDB.pool.one(sqlConfirm, params)
+            if (amount === '0') return res.status(400).json({ ok: false, msg: `No existe ninguna materia con el id ${params[0]}` })
+            const { rowCount } = await connectionDB.pool.result(sqlDelete, params)
+            return res.status(200).json({ ok: true, msg: `La materia con el id ${params[0]} ha sido eliminada`, affectedRows: rowCount })
+        } catch(error) {
+            console.log(red('Error: '), error)
+            return res.status(500).json({ ok: false, msg: 'Comuníquese con el administrador' })
+        }
+    }
 }
 
 

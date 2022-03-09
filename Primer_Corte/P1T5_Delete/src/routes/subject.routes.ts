@@ -18,7 +18,9 @@ class SubjectRoutes {
      */
     public config = (): void => {
         this.subjectsRoutes.get('/', subjectController.getSubjects)
+        this.subjectsRoutes.get('/:subjectId', subjectController.getOneSubjectById)
         this.subjectsRoutes.post('/create-subject', subjectController.postSubject)
+        this.subjectsRoutes.delete('/:subjectId', subjectController.deleteOneSubjectById)
     }
 }
 
