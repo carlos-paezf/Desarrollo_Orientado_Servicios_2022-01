@@ -1,7 +1,13 @@
 'use strict'
 
 import { Router } from "express";
-import subjectController from "../controllers/subject.controller";
+
+import { 
+    subjectControllerDelete, 
+    subjectControllerGet, 
+    subjectControllerPost, 
+    subjectControllerUpdate 
+} from "../controllers/subjects";
 
 
 class SubjectRoutes {
@@ -17,10 +23,11 @@ class SubjectRoutes {
      * It creates the routes for the program controller.
      */
     public config = (): void => {
-        this.subjectsRoutes.get('/', subjectController.getSubjects)
-        this.subjectsRoutes.get('/:subjectId', subjectController.getOneSubjectById)
-        this.subjectsRoutes.post('/create-subject', subjectController.postSubject)
-        this.subjectsRoutes.delete('/:subjectId', subjectController.deleteOneSubjectById)
+        this.subjectsRoutes.get('/', subjectControllerGet.getSubjects)
+        this.subjectsRoutes.get('/:subjectId', subjectControllerGet.getOneSubjectById)
+        this.subjectsRoutes.post('/create-subject', subjectControllerPost.postSubject)
+        this.subjectsRoutes.put('/update-subject/:subjectId', subjectControllerUpdate.updateOneSubjectById)
+        this.subjectsRoutes.delete('/:subjectId', subjectControllerDelete.deleteOneSubjectById)
     }
 }
 
