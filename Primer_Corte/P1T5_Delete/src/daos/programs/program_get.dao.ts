@@ -42,7 +42,7 @@ export class ProgramDAO_Get {
 
     /**
      * It gets one program by id.
-     * @param {string} sqlConfirm - The SQL query that will be executed to confirm if the program exists.
+     * @param {string} sqlConfirmId - The SQL query that will be executed to confirm if the program exists.
      * @param {string} sqlQuery - The query to be executed.
      * @param {any} params - any
      * @param {Response} res - Response
@@ -71,9 +71,9 @@ export class ProgramDAO_Get {
      * }
      * ```
      */
-    protected static getOneProgramById = async (sqlConfirm: string, sqlQuery: string, params: any, res: Response): Promise<any> => {
+    protected static getOneProgramById = async (sqlConfirmId: string, sqlQuery: string, params: any, res: Response): Promise<any> => {
         try {
-            const { amount } = await connectionDB.pool.one(sqlConfirm, params)
+            const { amount } = await connectionDB.pool.one(sqlConfirmId, params)
             if (amount === '0') return res.status(400).json({ ok: false, msg: `No existe un programa con el id ${params[0]}` })
             const { programId, programName } = await connectionDB.pool.one(sqlQuery, params)
             return res.status(200).json({ ok: true, data: { programId, programName } })

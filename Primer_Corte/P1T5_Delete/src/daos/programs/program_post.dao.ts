@@ -7,7 +7,7 @@ export class ProgramDAO_Post {
     /**
      * It creates a program.
      * This is a function that will be used to create a program register.
-     * @param {string} sqlConfirm - The SQL query to confirm if the program already exists. 
+     * @param {string} sqlConfirmUnique - The SQL query to confirm if the program already exists. 
      * @param {string} sqlCreate - The SQL query to create the program.
      * @param {any} parameters 
      * @param {Response} res - Response - The response object that is passed in by the controller.
@@ -35,9 +35,9 @@ export class ProgramDAO_Post {
      * }
      * ```
      */
-    protected static postProgram = async (sqlConfirm: string, sqlCreate: string, parameters: any, res: Response): Promise<any> => {
+    protected static postProgram = async (sqlConfirmUnique: string, sqlCreate: string, parameters: any, res: Response): Promise<any> => {
         await connectionDB.pool.task(async query => {
-            const { amount } = await query.one(sqlConfirm, parameters)
+            const { amount } = await query.one(sqlConfirmUnique, parameters)
             if (parseInt(amount) === 0) {
                 return await query.one(sqlCreate, parameters)
             }

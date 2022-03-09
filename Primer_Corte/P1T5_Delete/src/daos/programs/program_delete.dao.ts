@@ -6,7 +6,7 @@ import connectionDB from '../../config/connection/connection_DB';
 export class ProgramDAO_Delete {
     /**
      * It deletes a program by its id.
-     * @param {string} sqlConfirm - The SQL query to confirm that the program exists.
+     * @param {string} sqlConfirmId - The SQL query to confirm that the program exists.
      * @param {string} sqlDelete - The SQL query to delete the program.
      * @param {any} params - any
      * @param {Response} res - Response
@@ -33,9 +33,9 @@ export class ProgramDAO_Delete {
      * }
      * ```
      */
-    protected static deleteOneProgramById = async (sqlConfirm: string, sqlDelete: string, params: any, res: Response): Promise<any> => {
+    protected static deleteOneProgramById = async (sqlConfirmId: string, sqlDelete: string, params: any, res: Response): Promise<any> => {
         try {
-            const { amount } = await connectionDB.pool.one(sqlConfirm, params)
+            const { amount } = await connectionDB.pool.one(sqlConfirmId, params)
             if (amount === '0') return res.status(400).json({ ok: false, msg: `No existe un programa con el id ${params[0]}` })
             const { rowCount } = await connectionDB.pool.result(sqlDelete, params)
             return res.status(200).json({ ok: true, msg: `El programa con el id ${params[0]}, ha sido eliminado`, affectedRows: rowCount })

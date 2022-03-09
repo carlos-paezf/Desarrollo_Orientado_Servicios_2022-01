@@ -14,9 +14,35 @@ export class ProgramDAO_Update {
      * @param {string} sqlUpdate - The SQL query that will be executed.
      * @param {any} parameters - any[]
      * @param {Response} res - Response
-     * @returns The response is a JSON object with the following structure:
+     * @returns If everything is fine, the response is a JSON object with the following structure:
      * ```json
-     * 
+     * {
+     *      "ok": true,
+     *      "msg": "Se ha actualizado el programa con el id 0",
+     *      "affectedRows": 1,
+     *      "idProgram": 1
+     * }
+     * ```
+     * If the entered Id does not exists, the response is a JSON object with the following structure:
+     * ```json
+     * {
+     *      "ok": false,
+     *      "msg": "No existe un programa con el id 0"
+     * }
+     * ```
+     * If the program name already exists, the response is a JSON object with the following structure:
+     * ```json
+     * {
+     *      "ok": false,
+     *      "msg": "No se pueden duplicar los nombres de un programa"
+     * }
+     * ```
+     * In case the problem is with the backend, the response will be a JSON object with the following structure:
+     * ```json
+     * {
+     *      "ok": false,
+     *      "msg": "Comuníquese con el Administrador"
+     * }
      * ```
      */
     protected static updateProgram = async (sqlConfirmId: string, sqlConfirmUnique: string, sqlUpdate: string, parameters: any, res: Response): Promise<any> => {
