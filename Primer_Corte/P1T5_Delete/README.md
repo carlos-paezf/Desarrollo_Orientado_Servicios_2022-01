@@ -350,7 +350,10 @@ export default connectionDB
 export const SQL_PROGRAMS = {
     ALL: 'SELECT p.program_id, p.program_name FROM program p ORDER BY p.program_name',
     CONFIRM: 'SELECT COUNT(p.program_name) AS amount FROM program p WHERE LOWER(p.program_name) = LOWER($1)',
-    CREATE: 'INSERT INTO program (program_name) VALUES ($1) RETURNING program_id'
+    CREATE: 'INSERT INTO program (program_name) VALUES ($1) RETURNING program_id',
+    CONFIRM_ONE: 'SELECT COUNT(p.program_id) AS amount FROM program p WHERE p.program_id = $1',
+    SELECT_ONE: 'SELECT p.program_id, p.program_name FROM program p WHERE p.program_id = $1',
+    DELETE: 'DELETE FROM program p WHERE p.program_id = $1'
 }
 ```
 
@@ -422,6 +425,66 @@ class ProgramDAO {
 export default ProgramDAO
 ```
 
+#### Obtener la información de un programa por su id
+
+```ts
+'use strict'
+
+import { Response } from "express";
+import { red } from 'colors'
+
+import connectionDB from "../config/connection/connection_DB";
+
+
+class ProgramDAO {
+    ...
+    protected static getOneProgramById = async (sqlConfirm: string, sqlQuery: string, params: any, res: Response): Promise<any> => {
+        try {
+            const { amount } = await connectionDB.pool.one(sqlConfirm, params)
+            if (amount === '0') return res.status(400).json({ ok: false, msg: `No existe un programa con el id ${params[0]}` })
+            const { programId, programName } = await connectionDB.pool.one(sqlQuery, params)
+            return res.status(200).json({ ok: true, data: { programId, programName } })
+        } catch (error) {
+            console.log(red('Error: '), error)
+            return res.status(500).json({ ok: false, msg: 'Comuníquese con el administrador' })
+        }
+    }
+}
+
+
+export default ProgramDAO
+```
+
+#### Eliminar un programa por su id
+
+```ts
+'use strict'
+
+import { Response } from "express";
+import { red } from 'colors'
+
+import connectionDB from "../config/connection/connection_DB";
+
+
+class ProgramDAO {
+    ...
+    protected static deleteOneProgramById = async (sqlConfirm: string, sqlDelete: string, params: any, res: Response): Promise<any> => {
+        try {
+            const { amount } = await connectionDB.pool.one(sqlConfirm, params)
+            if (amount === '0') return res.status(400).json({ ok: false, msg: `No existe un programa con el id ${params[0]}` })
+            const { rowCount } = await connectionDB.pool.result(sqlDelete, params)
+            return res.status(200).json({ ok: true, msg: `El programa con el id ${params[0]}, ha sido eliminado`, affectedRows: rowCount })
+        } catch (error) {
+            console.log(red('Error: '), error)
+            return res.status(500).json({ ok: false, msg: 'Comuníquese con el Administrador' })
+        }
+    }
+}
+
+
+export default ProgramDAO
+```
+
 ### Program Controller
 
 ```ts
@@ -438,6 +501,16 @@ class ProgramController extends ProgramDAO {
     public postProgram = (req: Request, res: Response): void => {
         const { programName } = req.body
         ProgramDAO.postProgram(SQL_PROGRAMS.CONFIRM, SQL_PROGRAMS.CREATE, [programName], res)
+    }
+
+    public getOneProgramById = (req: Request, res: Response): void => {
+        const { programId } = req.params
+        ProgramDAO.getOneProgramById(SQL_PROGRAMS.CONFIRM_ONE, SQL_PROGRAMS.SELECT_ONE, [programId], res)
+    }
+
+    public deleteOneProgramById = (req: Request, res: Response): void => {
+        const { programId } = req.params
+        ProgramDAO.deleteOneProgramById(SQL_PROGRAMS.CONFIRM_ONE, SQL_PROGRAMS.DELETE, [programId], res)
     }
 }
 
@@ -465,7 +538,9 @@ class ProgramRoutes {
 
     public config = (): void => {
         this.programRoutes.get('/', programController.getPrograms)
+        this.programRoutes.get('/:programId', programController.getOneProgramById)
         this.programRoutes.post('/create-program', programController.postProgram)
+        this.programRoutes.delete('/:programId', programController.deleteOneProgramById)
     }
 }
 

@@ -23,6 +23,26 @@ class ProgramController extends ProgramDAO {
         const { programName } = req.body
         ProgramDAO.postProgram(SQL_PROGRAMS.CONFIRM, SQL_PROGRAMS.CREATE, [programName], res)
     }
+
+    /**
+     * This a function that will be called when the user request the `/programs/:programId` endpoint, with the verb GET
+     * @param {Request} req - Request - The request object that contains the request parameters
+     * @param {Response} res - Response  The response object that is passed back to the client.
+     */
+    public getOneProgramById = (req: Request, res: Response): void => {
+        const { programId } = req.params
+        ProgramDAO.getOneProgramById(SQL_PROGRAMS.CONFIRM_ONE, SQL_PROGRAMS.SELECT_ONE, [programId], res)
+    }
+
+    /**
+     * This a function that will be called when the user request the `/programs/:programId` endpoint, with the verb DELETE
+     * @param {Request} req - Request - The request object that contains the request parameters
+     * @param {Response} res - Response  The response object that is passed back to the client.
+     */
+    public deleteOneProgramById = (req: Request, res: Response): void => {
+        const { programId } = req.params
+        ProgramDAO.deleteOneProgramById(SQL_PROGRAMS.CONFIRM_ONE, SQL_PROGRAMS.DELETE, [programId], res)
+    }
 }
 
 

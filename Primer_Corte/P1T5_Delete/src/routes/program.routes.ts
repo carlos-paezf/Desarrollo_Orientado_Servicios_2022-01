@@ -1,7 +1,7 @@
 'use strict'
 
 import { Router } from 'express'
-import programController from '../controllers/program.controller'
+import programController from '../controllers/program.controller';
 
 
 class ProgramRoutes {
@@ -18,7 +18,9 @@ class ProgramRoutes {
      */
     public config = (): void => {
         this.programRoutes.get('/', programController.getPrograms)
+        this.programRoutes.get('/:programId', programController.getOneProgramById)
         this.programRoutes.post('/create-program', programController.postProgram)
+        this.programRoutes.delete('/:programId', programController.deleteOneProgramById)
     }
 }
 
