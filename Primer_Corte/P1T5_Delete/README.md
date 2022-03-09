@@ -1258,3 +1258,9 @@ server.init()
 ## Documentación de los Endpoints en Postman
 
 Podemos generar la documentación de la colección que administra todas las rutas de este proyecto, y hacerlas publicas en la web. Por ejemplo, para este caso, esta sería la documentación para este backend REST: [Endpoint Backend - Falso SAC](https://documenter.getpostman.com/view/8438809/UVktqtTL)
+
+## Cambio en la estructura del proyecto
+
+Nuestro proyecto tendrá una nueva estructura, en donde cada repositorio, dao o controlador será dividido en varios archivos con relación entre sí, por lo tanto, para reducir las líneas de importación, creamos un archivo `index.ts` en cada directorio con el fin de reunir las exportaciones de los otros archivos.
+
+Es importante aclarar que las exportaciones ahora no se harán por defecto en cada archivo, esto con el fin de poderlas unir todas en un solo archivo.
