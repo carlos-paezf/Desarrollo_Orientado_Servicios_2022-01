@@ -44,7 +44,7 @@ class SubjectController extends SubjectDAO {
      */
     public deleteOneSubjectById = (req: Request, res: Response): void => {
         const { subjectId } = req.params
-        SubjectDAO.deleteOneSubjectById(SQL_SUBJECT.CONFIRM, SQL_SUBJECT.DELETE_ONE, [subjectId], res)
+        SubjectDAO.deleteOneSubjectById(SQL_SUBJECT.CONFIRM_ONE, SQL_SUBJECT.DELETE_ONE, [subjectId], res)
     }
 }
 
