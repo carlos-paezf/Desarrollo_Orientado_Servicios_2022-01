@@ -1,5 +1,6 @@
 import { Router } from "express";
-import pensumController from "../controllers/pensum.controller";
+import { pensumControllerDelete, pensumControllerGet, pensumControllerPost } from "../controllers/pensums";
+import { pensumControllerUpdate } from '../controllers/pensums/pensum_update.controller';
 
 
 class PensumRoutes {
@@ -15,8 +16,11 @@ class PensumRoutes {
      * IS creates the routes for the pensum controller.
      */
     public config = (): void => {
-        this.pensumRoutes.get('/', pensumController.getPensums)
-        this.pensumRoutes.post('/create-pensum', pensumController.postPensum)
+        this.pensumRoutes.get('/', pensumControllerGet.getPensums)
+        this.pensumRoutes.get('/:pensumId', pensumControllerGet.getOnePensumById)
+        this.pensumRoutes.post('/create-pensum', pensumControllerPost.postPensum)
+        this.pensumRoutes.put('/update-pensum/:pensumId', pensumControllerUpdate.updateOnePensumById)
+        this.pensumRoutes.delete('/:pensumId', pensumControllerDelete.deleteOnePensumById)
     }
 }
 
