@@ -1,48 +1,9 @@
-'use strict'
-
 import { Response } from 'express'
 import { red } from 'colors'
-
-import connectionDB from '../config/connection/connection_DB';
-
-
-class SemesterDAO {
-    /**
-     * This is a function that will be user to get the semesters information.
-     * @param {string} sqlQuery - The SQL query to execute.
-     * @param {any} parameters
-     * @param {Response} res - Response - The response object that is passed in by the controller.
-     * @returns If everything is fine, the response is a JSON object with the following structure:
-     * ```json
-     * {
-     *      "ok": true,
-     *      "resultsQuery": [
-     *          {
-     *              "semesterId": 1,
-     *              "semesterName": "Semestre 1"
-     *          }
-     *      ]
-     * }
-     * ```
-     * Otherwise, the response is a JSON object with the following structure:
-     * ```json
-     * {
-     *      "ok": false,
-     *      "msg": "Comuníquese con el Administrador"
-     * }
-     * ```
-     */
-    protected static getSemesters = async (sqlQuery: string, parameters: any, res: Response): Promise<any> => {
-        try {
-            const { rows } = await connectionDB.pool.result(sqlQuery, parameters)
-            return res.status(200).json({ ok: true, resultsQuery: rows })
-        } catch (error) {
-            console.log(red('Error: '), error)
-            return res.status(500).json({ ok: false, msg: 'Comuníquese con el Administrador' })
-        }
-    }
+import connectionDB from '../../config/connection/connection_DB'
 
 
+export class SemesterDAO_Post {
     /**
      * It creates a new semester.
      * This is a function that will be used to create a semester register.
@@ -76,19 +37,19 @@ class SemesterDAO {
      * }
      * ```
      */
-    protected static postSemester = async (sqlConfirm: string, sqlCreate: string, parameters: any, res: Response): Promise<any> => {
+    protected static postSemester = async (sqlConfirmUnique: string, sqlCreate: string, parameters: any, res: Response): Promise<any> => {
         try {
             const { semesterId, amount } = await connectionDB.pool.task(async query => {
-                const { amount } = await query.one(sqlConfirm, parameters)
+                const { amount } = await query.one(sqlConfirmUnique, parameters)
                 if (parseInt(amount) === 0) {
                     return await query.one(sqlCreate, parameters)
                 } else {
                     return { semesterId: 0, amount }
                 }
             })
-            if(semesterId !== 0) {
+            if (semesterId !== 0) {
                 return res.status(201).json({ ok: true, msg: 'Semestre creado', newId: semesterId })
-            } 
+            }
             else return res.status(400).json({ ok: false, msg: 'Semestre ya existente', amount })
         } catch (error: any) {
             console.log(red('Error: '), error)
@@ -96,6 +57,3 @@ class SemesterDAO {
         }
     }
 }
-
-
-export default SemesterDAO
