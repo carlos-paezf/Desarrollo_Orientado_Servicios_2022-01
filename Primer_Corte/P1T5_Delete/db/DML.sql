@@ -52,3 +52,12 @@ INSERT INTO pensum (program_id, pensum_name) VALUES (4, 'Pensum 40');
 INSERT INTO pensum_subject (pensum_id, subject_id, semester_id) VALUES (1, 1, 1);
 INSERT INTO pensum_subject (pensum_id, subject_id, semester_id) VALUES (1, 2, 2);
 INSERT INTO pensum_subject (pensum_id, subject_id, semester_id) VALUES (2, 2, 3);
+
+
+/* =============================================================== */
+/* Table: Access                                                   */
+/* =============================================================== */
+
+INSERT INTO access (access_email, access_key) VALUES ('test1@mail.com', '1234567890');
+INSERT INTO access (access_email, access_key) VALUES ('test2@mail.com', '0987654321');
+INSERT INTO access (access_email, access_key) VALUES ('test3@mail.com', '1029384756');

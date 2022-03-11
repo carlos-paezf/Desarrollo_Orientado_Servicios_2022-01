@@ -64,6 +64,18 @@ CREATE TABLE pensum_subject (
 
 
 /* =============================================================== */
+/* Table: Access                                                   */
+/* =============================================================== */
+
+CREATE TABLE access (
+    access_id SERIAL NOT NULL,
+    access_email VARCHAR(200) NOT NULL,
+    access_key VARCHAR(200) NOT NULL,
+    CONSTRAINT PK_ACCESS PRIMARY KEY(access_id)
+);
+
+
+/* =============================================================== */
 /* Table: Constraints                                              */
 /* =============================================================== */
 
@@ -101,3 +113,6 @@ ALTER TABLE pensum_subject
     REFERENCES semester (semester_id) 
     ON DELETE restrict ON UPDATE cascade;
 
+
+ALTER TABLE access OWNER TO user_node;
+CREATE UNIQUE INDEX index_access_email on access (access_email);
