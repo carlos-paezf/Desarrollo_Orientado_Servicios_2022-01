@@ -1,11 +1,11 @@
 {
-    "name": "p1t5_delete",
+    "name": "p1t6_jwt",
     "version": "1.0.0",
-    "description": "Taller",
+    "description": "",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "tsc -w",
+        "build": "tsc --watch",
         "dev": "nodemon dist/index.js"
     },
     "keywords": [],

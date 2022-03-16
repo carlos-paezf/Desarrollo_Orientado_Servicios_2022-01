@@ -58,6 +58,13 @@ INSERT INTO pensum_subject (pensum_id, subject_id, semester_id) VALUES (2, 2, 3)
 /* Table: Access                                                   */
 /* =============================================================== */
 
-INSERT INTO access (access_email, access_key) VALUES ('test1@mail.com', '1234567890');
-INSERT INTO access (access_email, access_key) VALUES ('test2@mail.com', '0987654321');
-INSERT INTO access (access_email, access_key) VALUES ('test3@mail.com', '1029384756');
+INSERT INTO access (access_email, access_key, rol_id) VALUES ('test1@mail.com', '1234567890', '1');
+INSERT INTO access (access_email, access_key, rol_id) VALUES ('test2@mail.com', '0987654321', '2');
+INSERT INTO access (access_email, access_key, rol_id) VALUES ('test3@mail.com', '1029384756', '3');
+
+
+/* =============================================================== */
+/* Table: Rol                                                      */
+/* =============================================================== */
+
+INSERT INTO rol (rol_name) VALUES ('Estudiante'), ('Docente'), ('Administrativo');

@@ -76,6 +76,17 @@ CREATE TABLE access (
 
 
 /* =============================================================== */
+/* Table: Roles                                                    */
+/* =============================================================== */
+
+CREATE TABLE role (
+    role_id SERIAL NOT NULL,
+    role_name VARCHAR(200) NOT NULL,
+    CONSTRAINT PK_ROL PRIMARY KEY(role_id)
+);
+
+
+/* =============================================================== */
 /* Table: Constraints                                              */
 /* =============================================================== */
 
@@ -116,3 +127,12 @@ ALTER TABLE pensum_subject
 
 ALTER TABLE access OWNER TO user_node;
 CREATE UNIQUE INDEX index_access_email on access (access_email);
+ALTER TABLE access ADD COLUMN rol_id INT4 NOT NULL;
+ALTER TABLE access 
+    ADD CONSTRAINT FK_ACCESS_ROL 
+    FOREIGN KEY(role_id) 
+    REFERENCES role (role_id) 
+    ON DELETE restrict ON UPDATE cascade;
+
+
+ALTER TABLE role OWNER TO user_node;

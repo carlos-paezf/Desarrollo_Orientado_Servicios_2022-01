@@ -11,7 +11,7 @@ npm init -y
 ### Módulos necesarios
 
 ```txt
-npm install cors morgan express pg-promise colors dotenv
+npm install cors morgan express pg-promise colors dotenv jsonwebtoken
 ```
 
 ### Tipado de los módulos
@@ -30,6 +30,10 @@ npm install @types/express --save-dev
 
 ```txt
 npm install @types/pg-promise --save-dev
+```
+
+```txt
+npm install @types/jsonwebtoken --save-dev
 ```
 
 ### Instalar Nodemon en modo desarrollo
