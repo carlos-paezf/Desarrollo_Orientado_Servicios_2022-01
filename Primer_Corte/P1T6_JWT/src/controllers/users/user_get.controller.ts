@@ -1,6 +1,7 @@
 import { UserDAO_Get } from "../../daos/users/users_get.dao";
 import { Request, Response } from 'express';
 import { SQL_USERS_SELECT } from "../../repositories/users/users_select.sql";
+import { SQL_ACCESS_SELECT } from '../../repositories/access/access_select.sql';
 
 
 class UserController_Get extends UserDAO_Get {
@@ -10,7 +11,7 @@ class UserController_Get extends UserDAO_Get {
     }
 
     public getAllUsers = (req: Request, res: Response): void => {
-        UserController_Get.getAllUsers(SQL_USERS_SELECT.USERS, [], res)
+        UserController_Get.getAllUsers(SQL_USERS_SELECT.USERS, SQL_ACCESS_SELECT.COUNT, [], res)
     }
 }
 

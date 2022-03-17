@@ -6,4 +6,5 @@ export const SQL_ACCESS_SELECT = {
         INNER JOIN role r \
         ON u.role_id = r.role_id \
         WHERE a.access_email = $1 AND a.access_password = $2',
+    COUNT: 'SELECT COUNT(l.user_id) as all_login FROM login l'
 }

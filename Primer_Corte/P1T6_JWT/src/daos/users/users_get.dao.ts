@@ -18,10 +18,11 @@ export class UserDAO_Get {
         }
     }
 
-    protected static getAllUsers = async (sqlQuery: string, params: any, res: Response): Promise<any> => {
+    protected static getAllUsers = async (sqlQuery: string, sqlCountLogin: string, params: any, res: Response): Promise<any> => {
         try {
             const { rows } = await connectionDB.pool.result(sqlQuery, params)
-            return res.status(200).json({ ok: true, rows })
+            const { allLogin } = await connectionDB.pool.one(sqlCountLogin, params)
+            return res.status(200).json({ ok: true, allLogin, rows })
         } catch (error) {
             console.log(red('Error: '), error)
             return res.status(500).json({ ok: false, msg: 'Comuníquese con el administrador' })
