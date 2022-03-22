@@ -11,6 +11,7 @@ import subjectRoutes from '../../routes/subject.routes'
 import pensumRoutes from '../../routes/pensum.routes'
 import pensumSubjectRoutes from '../../routes/pensum-subject.routes'
 import accessRoutes from '../../routes/access.routes'
+import { validate } from '../../middlewares/validate.middleware';
 
 
 class Server {
@@ -22,7 +23,7 @@ class Server {
         subjects: '/api/subjects',
         pensums: '/api/pensums',
         pensumSubject: '/api/pensum-subject',
-        access: '/api/access'
+        access: '/api/private/access'
     }
 
     constructor() {
@@ -43,6 +44,10 @@ class Server {
         this._app.use(urlencoded({ extended: true }))
     }
 
+    public middlewares = () => {
+
+    }
+
     /**
      * This is where we define the routes that the server will respond to.
      */
@@ -52,7 +57,7 @@ class Server {
         this._app.use(this._paths.subjects, subjectRoutes)
         this._app.use(this._paths.pensums, pensumRoutes)
         this._app.use(this._paths.pensumSubject, pensumSubjectRoutes)
-        this._app.use(this._paths.access, accessRoutes)
+        this._app.use(this._paths.access, [validate.validateToken], accessRoutes)
     }
 
     /**

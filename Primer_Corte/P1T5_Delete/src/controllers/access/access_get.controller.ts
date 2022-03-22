@@ -5,6 +5,8 @@ import { SQL_ACCESS_SELECT } from '../../repositories/access';
 
 class AccessController_Get extends AccessDAO_Get {
     public getAccess = (req: Request, res: Response): void => {
+        const { jwtPayload } = req.body
+        console.log(jwtPayload)
         AccessController_Get.getAccess(SQL_ACCESS_SELECT.ALL, [], res)
     }
 }
