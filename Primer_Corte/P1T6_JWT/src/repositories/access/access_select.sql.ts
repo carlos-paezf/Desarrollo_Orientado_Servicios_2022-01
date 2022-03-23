@@ -1,5 +1,5 @@
 export const SQL_ACCESS_SELECT = {
-    LOGIN: 'SELECT u.user_name, u.user_surname, r.role_name \
+    LOGIN: 'SELECT u.user_id, u.user_name, u.user_surname, r.role_name \
         FROM access a \
         INNER JOIN users u \
         ON a.user_id = u.user_id \
