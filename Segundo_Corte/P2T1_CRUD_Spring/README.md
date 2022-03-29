@@ -152,3 +152,69 @@ Actualmente, la salida que vamos a tener será la siguiente:
 
 ![i](doc/31.png)
 ![i](doc/32.png)
+
+## Configurar las propiedades de la aplicación
+
+Necesitamos ingresar al archivo `src/main/resources/application.properties` y configurar los siguientes datos:
+
+![i](doc/33.png)
+
+![i](doc/34.png)
+
+Luego, podemos hacer un Build y Run al proyecto y obtendremos la siguiente salida:
+
+![i](doc/35.png)
+
+## Paquete: Modelos
+
+Vamos a crear un nuevo paquete que nos servirá para almacenar las entidades de nuestro proyecto, las cuales se van a conectar a la base de datos, y por la configuración establecida en el archivo `application.properties`, se actualizarán las tablas con lo que configuremos en nuestra entidad.
+
+![i](doc/36.png)
+
+![i](doc/37.png)
+
+Dentro del nuevo paquete, añadimos una nueva clase modelo:
+
+![i](doc/38.png)
+
+![i](doc/39.png)
+
+En Spring usamos muchas ***Anotaciones***, las cuales se identifican por el signo `@`. En esta clase, para definir una entidad, debemos usar la anotación `@Entity`. Mediante `@Table`, definimos la tabla de la base de datos a la que apunta.
+
+![i](doc/40.png)
+
+## Paquete: Repositorios
+
+Creamos un nuevo paquete y una interfaz dentro del mismo, para poder manejar los repositorios a implementar en nuestros servicios.
+
+![i](doc/41.png)
+
+En este primer repositorio tendremos el siguiente contenido:
+
+![i](doc/42.png)
+
+## Paquete: Servicios
+
+Creamos un nuevo paquete con una clase dentro del mismo.
+
+![i](doc/43.png)
+
+Usamos la anotación `@Service` para que Spring lo reconozca como un servicio, y hacemos una inyección de dependencias del repositorio, con la anotación `@Autowired`. Nuestro primer servicio, será listar todas las facultades.
+
+![i](doc/44.png)
+
+## Paquete: REST
+
+Creamos un nuevo paquete para poder llamar todos nuestro servicios:
+
+![i](doc/45.png)
+
+En la clase de su interior definimos que es un controlador de tipo REST, mediante la anotación `@RestController`, y definimos el endpoint base del proyecto con la anotación `@RequestMapping`. Inyectamos nuestro servicio, para luego usar el método de obtener todas las facultades. El endpoint para dicho método se define con la anotación `@GetMapping`
+
+![i](doc/46.png)
+
+## Prueba del endpoint
+
+Podemos hacer la prueba a nuestro servicio mediante Postman:
+
+![i](doc/47.png)
