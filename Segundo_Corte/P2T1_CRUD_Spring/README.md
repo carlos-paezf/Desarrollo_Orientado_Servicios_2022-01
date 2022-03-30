@@ -218,3 +218,32 @@ En la clase de su interior definimos que es un controlador de tipo REST, mediant
 Podemos hacer la prueba a nuestro servicio mediante Postman:
 
 ![i](doc/47.png)
+
+## Servicio para obtener un registro por ID
+
+Ya sea dentro de la entidad `Faculty` o `Professors`, tenemos un campo de Id en cada uno. Lo que queremos hacer es crear un servicio que nos permita traer un registro por su id. Para ello creamos el siguiente método dentro de cualquiera de los servicios, por ejemplo para las docentes:
+
+![i](doc/48.png)
+
+## Método REST para obtener por ID
+
+Ahora, dentro de los métodos REST para los docentes, creamos un endpoint para acceder mediante método GET, pero trayendo una parámetro. Para ello usamos las anotaciones `@GetMapping` y `@PathVariable`:
+
+![i](doc/49.png)
+
+## Servicio para postear un registro
+
+Dentro de los servicios, queremos postear un nuestro registro, para lo cual creamos un método que reciba un parámetro del tipo de entidad a crear, y luego guardamos el registro. Por ejemplo, en el caso de los docentes:
+
+![i](doc/50.png)
+
+## Método REST para crear
+
+En los métodos REST respectivos a la entidad, creamos una función que nos permite recibir por el body los datos del registro a crear. Si todo va bien, entonces retornamos una respuesta con una consulta por id, pero si algo sale mal retornamos un código de status de BAD_REQUEST. Este es el caso para los docentes.
+
+![i](doc/51.png)
+
+Dentro del Api Client POSTMAN, hacemos la prueba para este servicio en el caso de las facultades y los docentes:
+
+![i](doc/52.png)
+![i](doc/53.png)
