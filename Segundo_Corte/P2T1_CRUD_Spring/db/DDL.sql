@@ -1,3 +1,6 @@
+/* --------------------------------------------- */
+/* Tabla Facultades                              */
+/* --------------------------------------------- */
 CREATE TABLE faculties (
 	faculty_id SERIAL NOT NULL,
 	faculty_name VARCHAR(200) NOT NULL,
@@ -8,6 +11,9 @@ ALTER TABLE faculties OWNER TO user_spring;
 
 
 
+/* --------------------------------------------- */
+/* Tabla Profesores                              */
+/* --------------------------------------------- */
 CREATE TABLE professors (
 	professor_id SERIAL NOT NULL,
 	faculty_id INT4 NOT NULL,
