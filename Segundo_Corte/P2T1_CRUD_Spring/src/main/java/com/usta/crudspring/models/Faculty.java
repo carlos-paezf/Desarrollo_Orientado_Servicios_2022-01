@@ -20,7 +20,7 @@ public class Faculty {
      * generate the values.
      */
     @Id
-    @GeneratedValue(strategy = javax.persistence.GenerationType.AUTO)
+    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     @Column(name="faculty_id")
     private Long facultyId;
 

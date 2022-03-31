@@ -26,7 +26,7 @@ public class Professor {
      * Telling the database that this field is the primary key.
      */
     @Id
-    @GeneratedValue(strategy = javax.persistence.GenerationType.AUTO)
+    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     @Column(name = "professor_id")
     public Long professorId;
 
