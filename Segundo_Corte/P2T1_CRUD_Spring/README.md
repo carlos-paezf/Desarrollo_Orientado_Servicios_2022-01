@@ -8,7 +8,8 @@ Creamos un nuevo proyecto con ***IntelliJ IDEA Ultimate***:
 
 ## Spring Initializer
 
-Luego, seleccionamos ***Spring Initializer*** para configurar el nombre, ubicación, lenguaje, tipo, grupo, artifact, package name, versión de Java, y empaquetado del proyecto, y pulsamos Next.
+Luego, seleccionamos ***Spring Initializer*** para configurar el nombre, ubicación, lenguaje, tipo, grupo, artifact,
+package name, versión de Java, y empaquetado del proyecto, y pulsamos Next.
 
 ![i](doc/02.jpeg)
 
@@ -70,7 +71,8 @@ Añadimos nuevas filas dentro de cada tabla:
 
 ### Puerto del Servidor
 
-Necesitamos estar seguros de en que puerto está corriendo nuestro servidor de PostgreSQL, por lo tanto debemos acceder a las propiedades del servidor, e ir a la pestaña de conexión:
+Necesitamos estar seguros de en que puerto está corriendo nuestro servidor de PostgreSQL, por lo tanto debemos acceder a
+las propiedades del servidor, e ir a la pestaña de conexión:
 
 ![i](doc/22.png)
 
@@ -78,21 +80,26 @@ Necesitamos estar seguros de en que puerto está corriendo nuestro servidor de P
 
 ## Añadir un DataSource al proyecto
 
-En la interfaz del programa, podemos seleccionar la pestaña ***Database***, para añadir una nueva base de datos desde el signo de `+`. Como estamos usando PostgreSQL seleccionamos la fuente del mismo.
+En la interfaz del programa, podemos seleccionar la pestaña ***Database***, para añadir una nueva base de datos desde el
+signo de `+`. Como estamos usando PostgreSQL seleccionamos la fuente del mismo.
 
 ![i](doc/05.png)
 
-Una vez seleccionada la DataSource de PostgreSQL, debemos añadir el Host, Puerto, Usuario y Contraseña, y el nombre de la base de datos a la que nos vamos a conectar. Es importante presionar en la opción de **Test Connection** para poder saber si los datos que ingresamos son correctos. Una vez estemos seguros, entonces podemos presionar en OK.
+Una vez seleccionada la DataSource de PostgreSQL, debemos añadir el Host, Puerto, Usuario y Contraseña, y el nombre de
+la base de datos a la que nos vamos a conectar. Es importante presionar en la opción de **Test Connection** para poder
+saber si los datos que ingresamos son correctos. Una vez estemos seguros, entonces podemos presionar en OK.
 
 ![i](doc/06.png)
 
-Una vez terminada la configuración de la base de datos, podemos observar un estructura de árbol con la conexión de nuestra base de datos.
+Una vez terminada la configuración de la base de datos, podemos observar un estructura de árbol con la conexión de
+nuestra base de datos.
 
 ![i](doc/07.png)
 
 ## Hacer consultas a la DB desde IntelliJ
 
-Cuando estamos en la pestaña de Database, tenemos disponible una consola para hacer consultas, lo primero que podemos hacer, es una consulta manual.
+Cuando estamos en la pestaña de Database, tenemos disponible una consola para hacer consultas, lo primero que podemos
+hacer, es una consulta manual.
 
 ![i](doc/08.png)
 
@@ -100,11 +107,13 @@ El resultado que obtenemos en la parte inferior es la siguiente:
 
 ![i](doc/09.png)
 
-También podemos hacer consultas de manera automática, al presionar click derecho sobre una tabla e ir a la sección de **SQL Scripts**, en donde tenemos una serie de consultas disponibles.
+También podemos hacer consultas de manera automática, al presionar click derecho sobre una tabla e ir a la sección de **
+SQL Scripts**, en donde tenemos una serie de consultas disponibles.
 
 ![i](doc/10.png)
 
-Por ejemplo, seleccione la consulta **Select all rows from a table**, e inmediatamente aparece la siguiente consulta en la consola:
+Por ejemplo, seleccione la consulta **Select all rows from a table**, e inmediatamente aparece la siguiente consulta en
+la consola:
 
 ![i](doc/11.png)
 
@@ -114,18 +123,20 @@ Ejecutamos la consulta, y este es el resultado:
 
 ## Hacer un Build al proyecto
 
-Dentro de IntelliJ podemos hacer un build de nuestro proyecto, algo muy similar al script `build` que ejecutábamos en un proyecto de Node. Para ello, podemos presionar cualquiera de las siguientes opciones:
+Dentro de IntelliJ podemos hacer un build de nuestro proyecto, algo muy similar al script `build` que ejecutábamos en un
+proyecto de Node. Para ello, podemos presionar cualquiera de las siguientes opciones:
 
 - Podemos acceder a la pestaña **Build** y seleccionar **Build Project**
-  
+
   ![i](doc/25.png)
 
 - En la parte superior derecha tenemos la opción de hacer un build mediante el botón con el icono de un martillo
 
   ![i](doc/24.png)
 
-- En la parte inferior, también podemos encontrar la opción de **Build** y presionamos de nuevo en el icono del martillo.
-  
+- En la parte inferior, también podemos encontrar la opción de **Build** y presionamos de nuevo en el icono del
+  martillo.
+
   ![i](doc/26.png)
 
 La salida que obtendremos en cualquiera de las opciones, será la siguiente:
@@ -137,16 +148,16 @@ La salida que obtendremos en cualquiera de las opciones, será la siguiente:
 Para correr nuestro proyecto tenemos de nuevo varias opciones:
 
 - Podemos acceder a la pestaña **Run** y seleccionar **Run**, ya sea con el proyecto o seleccionándolo de manera manual
-  
+
   ![i](doc/28.png)
 
 - En la parte superior derecha tenemos la opción de Run mediante el botón con el icono de Play
-  
+
   ![i](doc/29.png)
 
 En la parte inferior, también podemos encontrar la opción de **Run** y presionamos de nuevo en el icono de Play.
-  
-  ![i](doc/30.png)
+
+![i](doc/30.png)
 
 Actualmente, la salida que vamos a tener será la siguiente:
 
@@ -167,7 +178,9 @@ Luego, podemos hacer un Build y Run al proyecto y obtendremos la siguiente salid
 
 ## Paquete: Modelos
 
-Vamos a crear un nuevo paquete que nos servirá para almacenar las entidades de nuestro proyecto, las cuales se van a conectar a la base de datos, y por la configuración establecida en el archivo `application.properties`, se actualizarán las tablas con lo que configuremos en nuestra entidad.
+Vamos a crear un nuevo paquete que nos servirá para almacenar las entidades de nuestro proyecto, las cuales se van a
+conectar a la base de datos, y por la configuración establecida en el archivo `application.properties`, se actualizarán
+las tablas con lo que configuremos en nuestra entidad.
 
 ![i](doc/36.png)
 
@@ -179,13 +192,15 @@ Dentro del nuevo paquete, añadimos una nueva clase modelo:
 
 ![i](doc/39.png)
 
-En Spring usamos muchas ***Anotaciones***, las cuales se identifican por el signo `@`. En esta clase, para definir una entidad, debemos usar la anotación `@Entity`. Mediante `@Table`, definimos la tabla de la base de datos a la que apunta.
+En Spring usamos muchas ***Anotaciones***, las cuales se identifican por el signo `@`. En esta clase, para definir una
+entidad, debemos usar la anotación `@Entity`. Mediante `@Table`, definimos la tabla de la base de datos a la que apunta.
 
 ![i](doc/40.png)
 
 ## Paquete: Repositorios
 
-Creamos un nuevo paquete y una interfaz dentro del mismo, para poder manejar los repositorios a implementar en nuestros servicios.
+Creamos un nuevo paquete y una interfaz dentro del mismo, para poder manejar los repositorios a implementar en nuestros
+servicios.
 
 ![i](doc/41.png)
 
@@ -199,7 +214,8 @@ Creamos un nuevo paquete con una clase dentro del mismo.
 
 ![i](doc/43.png)
 
-Usamos la anotación `@Service` para que Spring lo reconozca como un servicio, y hacemos una inyección de dependencias del repositorio, con la anotación `@Autowired`. Nuestro primer servicio, será listar todas las facultades.
+Usamos la anotación `@Service` para que Spring lo reconozca como un servicio, y hacemos una inyección de dependencias
+del repositorio, con la anotación `@Autowired`. Nuestro primer servicio, será listar todas las facultades.
 
 ![i](doc/44.png)
 
@@ -209,7 +225,9 @@ Creamos un nuevo paquete para poder llamar todos nuestro servicios:
 
 ![i](doc/45.png)
 
-En la clase de su interior definimos que es un controlador de tipo REST, mediante la anotación `@RestController`, y definimos el endpoint base del proyecto con la anotación `@RequestMapping`. Inyectamos nuestro servicio, para luego usar el método de obtener todas las facultades. El endpoint para dicho método se define con la anotación `@GetMapping`
+En la clase de su interior definimos que es un controlador de tipo REST, mediante la anotación `@RestController`, y
+definimos el endpoint base del proyecto con la anotación `@RequestMapping`. Inyectamos nuestro servicio, para luego usar
+el método de obtener todas las facultades. El endpoint para dicho método se define con la anotación `@GetMapping`
 
 ![i](doc/46.png)
 
@@ -221,25 +239,31 @@ Podemos hacer la prueba a nuestro servicio mediante Postman:
 
 ## Servicio para obtener un registro por ID
 
-Ya sea dentro de la entidad `Faculty` o `Professors`, tenemos un campo de Id en cada uno. Lo que queremos hacer es crear un servicio que nos permita traer un registro por su id. Para ello creamos el siguiente método dentro de cualquiera de los servicios, por ejemplo para las docentes:
+Ya sea dentro de la entidad `Faculty` o `Professors`, tenemos un campo de Id en cada uno. Lo que queremos hacer es crear
+un servicio que nos permita traer un registro por su id. Para ello creamos el siguiente método dentro de cualquiera de
+los servicios, por ejemplo para las docentes:
 
 ![i](doc/48.png)
 
 ## Método REST para obtener por ID
 
-Ahora, dentro de los métodos REST para los docentes, creamos un endpoint para acceder mediante método GET, pero trayendo una parámetro. Para ello usamos las anotaciones `@GetMapping` y `@PathVariable`:
+Ahora, dentro de los métodos REST para los docentes, creamos un endpoint para acceder mediante método GET, pero trayendo
+una parámetro. Para ello usamos las anotaciones `@GetMapping` y `@PathVariable`:
 
 ![i](doc/49.png)
 
 ## Servicio para postear un registro
 
-Dentro de los servicios, queremos postear un nuestro registro, para lo cual creamos un método que reciba un parámetro del tipo de entidad a crear, y luego guardamos el registro. Por ejemplo, en el caso de los docentes:
+Dentro de los servicios, queremos postear un nuestro registro, para lo cual creamos un método que reciba un parámetro
+del tipo de entidad a crear, y luego guardamos el registro. Por ejemplo, en el caso de los docentes:
 
 ![i](doc/50.png)
 
 ## Método REST para crear
 
-En los métodos REST respectivos a la entidad, creamos una función que nos permite recibir por el body los datos del registro a crear. Si todo va bien, entonces retornamos una respuesta con una consulta por id, pero si algo sale mal retornamos un código de status de BAD_REQUEST. Este es el caso para los docentes.
+En los métodos REST respectivos a la entidad, creamos una función que nos permite recibir por el body los datos del
+registro a crear. Si todo va bien, entonces retornamos una respuesta con una consulta por id, pero si algo sale mal
+retornamos un código de status de BAD_REQUEST. Este es el caso para los docentes.
 
 ![i](doc/51.png)
 

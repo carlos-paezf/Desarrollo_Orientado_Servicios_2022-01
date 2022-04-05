@@ -63,7 +63,7 @@ public class Professor {
      * This is the constructor of the class. It is used to create a new object of the class.
      */
     public Professor(Long professorId, String professorName, String professorSurname, String professorDocument,
-            Faculty facultyId) {
+                     Faculty facultyId) {
         this.professorId = professorId;
         this.professorName = professorName;
         this.professorSurname = professorSurname;
@@ -74,11 +74,12 @@ public class Professor {
     /**
      * This is the constructor of the class. It is used to create a new object of the class.
      */
-    public Professor() { }
+    public Professor() {
+    }
 
     /**
      * The getProfessorId method returns the professorId field
-     * 
+     *
      * @return Nothing.
      */
     public Long getProfessorId() {
@@ -87,7 +88,7 @@ public class Professor {
 
     /**
      * `setProfessorId` is a function that sets the professorId field of the Professor class
-     * 
+     *
      * @param professorId The id of the professor.
      */
     public void setProfessorId(Long professorId) {
@@ -96,7 +97,7 @@ public class Professor {
 
     /**
      * Get the professor's name.
-     * 
+     *
      * @return The professor's name.
      */
     public String getProfessorName() {
@@ -105,7 +106,7 @@ public class Professor {
 
     /**
      * The function sets the professor name
-     * 
+     *
      * @param professorName The name of the professor.
      */
     public void setProfessorName(String professorName) {
@@ -114,7 +115,7 @@ public class Professor {
 
     /**
      * The getProfessorSurname function returns the surname of the professor
-     * 
+     *
      * @return The professor's surname.
      */
     public String getProfessorSurname() {
@@ -123,7 +124,7 @@ public class Professor {
 
     /**
      * The function sets the professor's surname
-     * 
+     *
      * @param professorSurname The professor's surname.
      */
     public void setProfessorSurname(String professorSurname) {
@@ -132,7 +133,7 @@ public class Professor {
 
     /**
      * The getProfessorDocument function returns the document of the professor
-     * 
+     *
      * @return The professor's document.
      */
     public String getProfessorDocument() {
@@ -141,7 +142,7 @@ public class Professor {
 
     /**
      * `setProfessorDocument` is a function that sets the professor document
-     * 
+     *
      * @param professorDocument The document of the professor.
      */
     public void setProfessorDocument(String professorDocument) {
@@ -150,7 +151,7 @@ public class Professor {
 
     /**
      * The getFacultyId method returns the value of the facultyId field
-     * 
+     *
      * @return Nothing.
      */
     public Faculty getFacultyId() {
@@ -159,7 +160,7 @@ public class Professor {
 
     /**
      * The setter method for the facultyId property
-     * 
+     *
      * @param facultyId The id of the faculty that the professor is being assigned to.
      */
     public void setFacultyId(Faculty facultyId) {

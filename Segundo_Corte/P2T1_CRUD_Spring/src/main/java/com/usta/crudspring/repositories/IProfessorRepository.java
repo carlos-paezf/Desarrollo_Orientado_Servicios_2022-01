@@ -9,4 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * Extending the JpaRepository interface and adding the Professor model and the Long data type.
  */
-public interface IProfessorRepository extends JpaRepository<Professor, Long> { }
+public interface IProfessorRepository extends JpaRepository<Professor, Long> {
+}

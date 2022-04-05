@@ -27,7 +27,7 @@ public class FacultyService {
 
     /**
      * Get all the faculties from the database
-     * 
+     *
      * @return A list of Faculty objects.
      */
     public List<Faculty> getAllFaculties() {
@@ -36,7 +36,7 @@ public class FacultyService {
 
     /**
      * Find a faculty by id
-     * 
+     *
      * @param id The id of the faculty to be retrieved.
      * @return Nothing.
      */
@@ -46,7 +46,7 @@ public class FacultyService {
 
     /**
      * Create a new Faculty object and save it to the database
-     * 
+     *
      * @param faculty The object that you want to save.
      * @return Nothing.
      */

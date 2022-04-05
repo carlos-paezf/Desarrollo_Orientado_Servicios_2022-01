@@ -19,11 +19,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
-
 @RestController
 @RequestMapping("/api/professors/")
 public class ProfessorRest {
-    
+
     /**
      * This is a way to inject the service into the controller.
      */
@@ -32,10 +31,10 @@ public class ProfessorRest {
 
     /**
      * Get all professors from the database
-     * 
+     *
      * @return A list of professors.
      */
-    @GetMapping(value="/get-all-professors")
+    @GetMapping(value = "/get-all-professors")
     private ResponseEntity<List<Professor>> getAllProfessors() {
         return ResponseEntity.ok(_professorService.getAllProfessors());
     }
@@ -43,25 +42,25 @@ public class ProfessorRest {
 
     /**
      * `@GetMapping(value="/get-professor-by-id")`
-     * 
+     * <p>
      * This is a Spring MVC annotation that tells Spring MVC to map this function to the URL
      * `/get-professor-by-id`
-     * 
+     *
      * @param id The id of the professor to be retrieved.
      * @return A professor object.
      */
-    @GetMapping(value="/get-professor-by-id/{id}")
+    @GetMapping(value = "/get-professor-by-id/{id}")
     private ResponseEntity<Optional<Professor>> getProfessorById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(_professorService.getProfessorById(id));
-    } 
+    }
 
     /**
      * Create a new professor
-     * 
+     *
      * @param professor The professor object that will be created.
      * @return The URI of the newly created professor.
      */
-    @PostMapping(value="/create-professor")
+    @PostMapping(value = "/create-professor")
     private ResponseEntity<Professor> createProfessor(@RequestBody Professor professor) {
         Professor temp = _professorService.createProfessor(professor);
         try {

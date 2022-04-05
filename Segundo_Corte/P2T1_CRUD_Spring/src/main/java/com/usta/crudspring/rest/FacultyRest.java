@@ -32,7 +32,7 @@ public class FacultyRest {
 
     /**
      * Get all faculties from the database
-     * 
+     *
      * @return A list of Faculty objects.
      */
     @GetMapping("/get-all-faculties")
@@ -42,7 +42,7 @@ public class FacultyRest {
 
     /**
      * Get a faculty by id
-     * 
+     *
      * @param id The id of the faculty to be retrieved.
      * @return The faculty object.
      */
@@ -53,7 +53,7 @@ public class FacultyRest {
 
     /**
      * Create a new faculty
-     * 
+     *
      * @param faculty The Faculty object that will be created.
      * @return The URI of the newly created faculty.
      */

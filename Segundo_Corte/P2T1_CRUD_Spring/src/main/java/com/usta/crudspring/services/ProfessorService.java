@@ -21,7 +21,7 @@ public class ProfessorService {
 
     /**
      * Get all the professors from the database
-     * 
+     *
      * @return A list of Professor objects.
      */
     public List<Professor> getAllProfessors() {
@@ -30,7 +30,7 @@ public class ProfessorService {
 
     /**
      * Get a professor by id
-     * 
+     *
      * @param id The id of the professor we want to retrieve.
      * @return A Professor object.
      */
@@ -40,7 +40,7 @@ public class ProfessorService {
 
     /**
      * Create a new professor
-     * 
+     *
      * @param professor The professor object that you want to create.
      * @return The Professor object that was saved.
      */

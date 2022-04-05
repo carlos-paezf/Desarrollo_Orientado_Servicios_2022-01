@@ -9,4 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * Extending the JpaRepository interface and declaring the Faculty class as the entity.
  */
-public interface IFacultyRepository extends JpaRepository<Faculty, Long> { }
+public interface IFacultyRepository extends JpaRepository<Faculty, Long> {
+}
