@@ -10,6 +10,7 @@ import com.usta.crud_university.services.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Get all subject, get a subject by id, and create a new subject
+ * Get all subjects, get a subject by id, create a new subject, and delete a subject
  * 
  * @author Carlos Páez
  */
@@ -67,5 +68,27 @@ public class SubjectREST {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+    }
+
+    /**
+     * `@DeleteMapping(value = "/delete/{id}")`
+     * 
+     * This annotation tells Spring MVC that this method is a handler method for
+     * HTTP DELETE requests.
+     * 
+     * The `@PathVariable` annotation is used to get the id of the subject to be
+     * deleted.
+     * 
+     * The function returns a `ResponseEntity<Void>`. This is a convenience method
+     * provided by Spring MVC.
+     * It creates a `ResponseEntity` with HTTP status code 204 (No Content).
+     * 
+     * @param id The id of the subject to be deleted.
+     * @return Nothing.
+     */
+    @DeleteMapping(value = "/delete/{id}")
+    private ResponseEntity<Void> deleteSubject(@PathVariable("id") long id) {
+        _subjectService.deleteSubjectById(id);
+        return ResponseEntity.ok().build();
     }
 }

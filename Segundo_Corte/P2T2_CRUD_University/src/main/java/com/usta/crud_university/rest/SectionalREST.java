@@ -10,6 +10,7 @@ import com.usta.crud_university.services.SectionalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Get all sectional, get a sectional by id, and create a new sectional
+ * The SectionalREST class is a Spring MVC controller that allows you to create,
+ * retrieve, update, and delete Sectional objects
  * 
  * @author Carlos Páez
  */
@@ -67,5 +69,29 @@ public class SectionalREST {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+    }
+
+    /**
+     * `@DeleteMapping(value = "/delete/{id}")`
+     * 
+     * This is a Spring MVC annotation that tells Spring MVC to map this function to
+     * the URL `/delete/{id}`.
+     * 
+     * The `@PathVariable("id")` annotation is a Spring MVC annotation that tells
+     * Spring MVC to pass the id parameter to the deleteSectionalById function.
+     * 
+     * The `_sectionalService.deleteSectionalById(id);` line tells Spring MVC to
+     * call the deleteSectionalById function in the SectionalService class.
+     * 
+     * The `return ResponseEntity.ok().build();` line tells Spring MVC to return a
+     * HTTP 200 response.
+     * 
+     * @param id The id of the Sectional to be deleted.
+     * @return Nothing.
+     */
+    @DeleteMapping(value = "/delete/{id}")
+    private ResponseEntity<Void> deleteSectionalById(@PathVariable("id") long id) {
+        _sectionalService.deleteSectionalById(id);
+        return ResponseEntity.ok().build();
     }
 }

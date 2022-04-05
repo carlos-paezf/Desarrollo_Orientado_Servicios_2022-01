@@ -10,6 +10,7 @@ import com.usta.crud_university.services.UniversityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Get all universities, get a university by id, and create a new university
+ * The UniversityREST class is a Spring MVC controller that handles HTTP requests for universities
  * 
  * @author Carlos Páez
  */
@@ -67,5 +68,30 @@ public class UniversityREST {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+    }
+
+    /**
+     * `@DeleteMapping(value = "/delete/{id}")`
+     * 
+     * This annotation is used to tell Spring MVC that this function is a handler
+     * for HTTP DELETE requests.
+     * 
+     * The `@PathVariable` annotation is used to tell Spring MVC that the `id`
+     * parameter in the path is a variable that needs to be bound to the function.
+     * 
+     * The `deleteUniversityById` function takes a single parameter, `id`, which is
+     * the id of the university to be deleted.
+     * 
+     * The function returns a `ResponseEntity` object with a status of `NO_CONTENT`.
+     * This tells Spring MVC that the function handled the request successfully, but
+     * that there is no content to return.
+     * 
+     * @param id The id of the university to be deleted.
+     * @return Nothing.
+     */
+    @DeleteMapping(value = "/delete/{id}")
+    private ResponseEntity<Void> deleteUniversityById(@PathVariable("id") long id) {
+        _universityService.deleteUniversity(id);
+        return ResponseEntity.ok().build();
     }
 }

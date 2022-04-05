@@ -10,6 +10,7 @@ import com.usta.crud_university.services.ProfessorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Get all professors, get a professor by id, and create a new professor
+ * Get all professors, get a professor by id, create a professor, and delete a professor
  * 
  * @author Carlos Páez
  */
@@ -67,5 +68,29 @@ public class ProfessorREST {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+    }
+
+    /**
+     * `@DeleteMapping(value = "/delete/{id}")`
+     * 
+     * This is a Spring MVC annotation that tells Spring MVC to map this function to
+     * the URL `/delete/{id}`.
+     * 
+     * The `@PathVariable("id")` annotation is a Spring MVC annotation that tells
+     * Spring MVC to pass the value of the `id` parameter in the URL to the function
+     * as a parameter named `id`.
+     * 
+     * The `_professorService.deleteProfessorById(id)` is the actual function call.
+     * 
+     * The `return ResponseEntity.ok().build();` is a Spring MVC annotation that
+     * tells Spring MVC to return a HTTP 200 response with an empty body.
+     * 
+     * @param id The id of the professor to be deleted.
+     * @return The HTTP status code and the resource.
+     */
+    @DeleteMapping(value = "/delete/{id}")
+    private ResponseEntity<Void> deleteProfessorById(@PathVariable("id") long id) {
+        _professorService.deleteProfessorById(id);
+        return ResponseEntity.ok().build();
     }
 }
