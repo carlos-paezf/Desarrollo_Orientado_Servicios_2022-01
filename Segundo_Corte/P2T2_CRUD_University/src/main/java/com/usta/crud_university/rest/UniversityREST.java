@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -91,7 +92,40 @@ public class UniversityREST {
      */
     @DeleteMapping(value = "/delete/{id}")
     private ResponseEntity<Void> deleteUniversityById(@PathVariable("id") long id) {
-        _universityService.deleteUniversity(id);
-        return ResponseEntity.ok().build();
+        try {
+            _universityService.deleteUniversityById(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            // return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+        }
+    }
+
+    /**
+     * Update a university by ID
+     * 
+     * @param university The university object that will be updated.
+     * @return The URI of the newly created resource.
+     */
+    @PutMapping(value = "/update")
+    private ResponseEntity<University> updateUniversityWithId(@RequestBody University university) {
+        University temp = _universityService.createUniversity(university);
+        try {
+            return ResponseEntity.created(new URI("/api/university/" + temp.getUniversityId())).body(temp);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+    /**
+     * `@GetMapping(value = "/total")`
+     * 
+     * This is a Spring MVC annotation that tells Spring MVC to map this function to the URL "/total"
+     * 
+     * @return The total number of universities.
+     */
+    @GetMapping(value = "/total")
+    private ResponseEntity<Integer> countTotalUniversityRecords() {
+        return ResponseEntity.ok(_universityService.countTotalUniversityRecords());
     }
 }

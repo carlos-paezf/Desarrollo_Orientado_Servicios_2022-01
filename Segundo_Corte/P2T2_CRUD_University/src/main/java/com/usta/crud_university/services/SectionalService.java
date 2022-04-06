@@ -60,4 +60,13 @@ public class SectionalService {
     public void deleteSectionalById(long id) {
         _sectionalRepository.deleteById(id);
     }
+
+    /**
+     * Count the total number of records in the sectional table
+     * 
+     * @return The total number of records in the Sectional table.
+     */
+    public Integer countTotalSectionalRecords() {
+        return _sectionalRepository.countTotalSectionalRecords();
+    }
 }

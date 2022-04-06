@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -93,5 +94,36 @@ public class SectionalREST {
     private ResponseEntity<Void> deleteSectionalById(@PathVariable("id") long id) {
         _sectionalService.deleteSectionalById(id);
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * `@PutMapping(value = "/update")`
+     * 
+     * This is a method annotation that tells Spring MVC to handle a PUT request to the `/update`
+     * endpoint
+     * 
+     * @param sectional The Sectional object that will be updated.
+     * @return The updated Sectional object.
+     */
+    @PutMapping(value = "/update")
+    private ResponseEntity<Sectional> updateSectionalWithId(@RequestBody Sectional sectional) {
+        Sectional temp = _sectionalService.createSectional(sectional);
+        try {
+            return ResponseEntity.created(new URI("/api/sectional/" + temp.getSectionalId())).body(temp);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    /**
+     * `@GetMapping(value = "/total")`
+     * 
+     * This is a Spring MVC annotation that tells Spring MVC to map this function to the URL "/total"
+     * 
+     * @return The total number of records in the database.
+     */
+    @GetMapping(value = "/total")
+    private ResponseEntity<Integer> countTotalSectionalRegisters() {
+        return ResponseEntity.ok(_sectionalService.countTotalSectionalRecords());
     }
 }

@@ -59,7 +59,16 @@ public class UniversityService {
      * 
      * @param id The id of the university to delete.
      */
-    public void deleteUniversity(long id) {
+    public void deleteUniversityById(long id) {
         _universityRepository.deleteById(id);
+    }
+
+    /**
+     * Count the total number of universities in the database
+     * 
+     * @return The count of all universities in the database.
+     */
+    public Integer countTotalUniversityRecords() {
+        return _universityRepository.countTotalUniversityRecords();
     }
 }
