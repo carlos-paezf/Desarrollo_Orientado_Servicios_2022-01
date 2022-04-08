@@ -88,10 +88,11 @@ ALTER TABLE images
 /* Tabla: Accesos                                */
 /* --------------------------------------------- */
 CREATE TABLE access (
+    access_id SERIAL NOT NULL,
     user_id INT4 NOT NULL,
     access_email VARCHAR(100) NOT NULL,
     access_password VARCHAR(150) NOT NULL,
-    CONSTRAINT PK_ACCESS PRIMARY KEY(user_id)
+    CONSTRAINT PK_ACCESS PRIMARY KEY(access_id)
 );
 
 ALTER TABLE access OWNER TO user_node;

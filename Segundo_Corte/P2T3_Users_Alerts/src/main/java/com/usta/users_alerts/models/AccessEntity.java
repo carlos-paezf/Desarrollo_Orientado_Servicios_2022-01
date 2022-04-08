@@ -27,10 +27,13 @@ public class AccessEntity {
      * Telling the database that this field is the primary key.
      */
     @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "access_id")
+    private Long accessId;
+    
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne(fetch = FetchType.EAGER)
-    private Long userId;
+    private UserEntity userId;
 
     /**
      * It's telling the database that the field `accessEmail` is a column in the
@@ -49,7 +52,8 @@ public class AccessEntity {
     /**
      * It's creating a new instance of the class AccessEntity.
      */
-    public AccessEntity(Long userId, String accessEmail, String accessPassword) {
+    public AccessEntity(Long accessId, UserEntity userId, String accessEmail, String accessPassword) {
+        this.accessId = accessId;
         this.userId = userId;
         this.accessEmail = accessEmail;
         this.accessPassword = accessPassword;
@@ -72,12 +76,20 @@ public class AccessEntity {
         return serialVersionUID;
     }
 
+    public Long getAccessId() {
+        return accessId;
+    }
+
+    public void setAccessId(Long accessId) {
+        this.accessId = accessId;
+    }
+
     /**
      * Get the userId of the current user
      * 
      * @return The userId property is being returned.
      */
-    public Long getUserId() {
+    public UserEntity getUserId() {
         return userId;
     }
 
@@ -88,7 +100,7 @@ public class AccessEntity {
      * 
      * @param userId The userId of the user that is being updated.
      */
-    public void setUserId(Long userId) {
+    public void setUserId(UserEntity userId) {
         this.userId = userId;
     }
 
