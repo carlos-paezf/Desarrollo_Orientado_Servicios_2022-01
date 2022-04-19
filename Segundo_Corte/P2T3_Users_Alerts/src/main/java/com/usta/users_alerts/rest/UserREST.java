@@ -20,7 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Get all users, get a user by id, create a user, update a user, and delete a user
+ * Get all users, get a user by id, create a user, update a user, and delete a
+ * user
  * 
  * @author Carlos Páez
  */
@@ -110,5 +111,22 @@ public class UserREST {
     private ResponseEntity<UserEntity> deleteUser(@PathVariable("id") Long id) {
         _userService.deleteUser(id);
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * It deletes a user from the database.
+     * 
+     * @param id The id of the user to be deleted.
+     * @return A ResponseEntity object.
+     */
+    @DeleteMapping(value = "/delete-try-catch/{id}")
+    private ResponseEntity<String> deleteUserWithTryCatch(@PathVariable("id") Long id) {
+        try {
+            _userService.deleteUser(id);
+            return ResponseEntity.ok("Usuario eliminado con éxito");
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al eliminar el usuario");
+        }
     }
 }
