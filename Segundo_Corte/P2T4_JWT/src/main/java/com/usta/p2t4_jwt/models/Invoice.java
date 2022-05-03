@@ -1,6 +1,6 @@
 package com.usta.p2t4_jwt.models;
 
-import java.sql.Date;
+import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
