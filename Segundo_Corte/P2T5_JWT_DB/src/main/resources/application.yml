@@ -1,0 +1,7 @@
+server:
+    port: 8000
+
+jwt: 
+    secret: 'secret'
+    algorithm: HS256
+    expiresIn: '1h'
